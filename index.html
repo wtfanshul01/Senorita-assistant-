@@ -468,217 +468,125 @@ body::before{
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════
-   ⚙️  CONFIG
-   ═══════════════════════════════════════════ */
-const GEMINI_MODEL = 'gemini-2.0-flash';
+/* ═══ CONFIG ═══ */
+const GEMINI_MODEL = 'gemini-3.6-flash';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse&key=`;
 
 function getKey() {
   return localStorage.getItem('senorita_key') || '';
 }
 
-/* ═══════════════════════════════════════════
-   🌐  UI STRINGS (per language)
-   ═══════════════════════════════════════════ */
+/* ═══ UI STRINGS ═══ */
 const UI = {
   en: {
-    ready: 'Ready',
-    listening: 'Listening...',
-    thinking: 'Thinking...',
-    speaking: 'Speaking...',
+    ready: 'Ready', listening: 'Listening...', thinking: 'Thinking...', speaking: 'Speaking...',
     welcomeTitle: "Hi, I'm Senorita 💜",
     welcomeText: 'Your personal AI assistant. Tap the mic or type below — ask anything in any language.',
     typePlaceholder: 'Type a message...',
-    noSpeech: "Didn't catch that, try again",
-    needMic: 'Mic permission required',
-    keyNeeded: 'Add your Gemini API key first',
-    settingsSaved: 'Settings saved ✨',
-    voiceOn: 'Voice ON',
-    voiceOff: 'Voice OFF',
-    chatCleared: 'Chat cleared',
-    langSet: 'Language: ',
-    confirmClear: 'Clear chat?'
+    noSpeech: "Didn't catch that, try again", needMic: 'Mic permission required',
+    keyNeeded: 'Add your Gemini API key first', settingsSaved: 'Settings saved ✨',
+    voiceOn: 'Voice ON', voiceOff: 'Voice OFF', chatCleared: 'Chat cleared',
+    langSet: 'Language: ', confirmClear: 'Clear chat?'
   },
   hi: {
-    ready: 'तैयार',
-    listening: 'सुन रही हूँ...',
-    thinking: 'सोच रही हूँ...',
-    speaking: 'बोल रही हूँ...',
+    ready: 'तैयार', listening: 'सुन रही हूँ...', thinking: 'सोच रही हूँ...', speaking: 'बोल रही हूँ...',
     welcomeTitle: 'नमस्ते, मैं Senorita हूँ 💜',
     welcomeText: 'आपकी personal AI assistant। माइक दबाओ या नीचे टाइप करो — किसी भी भाषा में पूछो।',
     typePlaceholder: 'संदेश लिखो...',
-    noSpeech: 'कुछ सुना नहीं, फिर कोशिश करो',
-    needMic: 'माइक permission चाहिए',
-    keyNeeded: 'पहले Gemini API key डालो',
-    settingsSaved: 'Settings सेव हो गईं ✨',
-    voiceOn: 'आवाज़ ON',
-    voiceOff: 'आवाज़ OFF',
-    chatCleared: 'चैट साफ़ हो गई',
-    langSet: 'भाषा: ',
-    confirmClear: 'चैट साफ़ करनी है?'
+    noSpeech: 'कुछ सुना नहीं, फिर कोशिश करो', needMic: 'माइक permission चाहिए',
+    keyNeeded: 'पहले Gemini API key डालो', settingsSaved: 'Settings सेव हो गईं ✨',
+    voiceOn: 'आवाज़ ON', voiceOff: 'आवाज़ OFF', chatCleared: 'चैट साफ़ हो गई',
+    langSet: 'भाषा: ', confirmClear: 'चैट साफ़ करनी है?'
   },
   bn: {
-    ready: 'প্রস্তুত',
-    listening: 'শুনছি...',
-    thinking: 'ভাবছি...',
-    speaking: 'বলছি...',
+    ready: 'প্রস্তুত', listening: 'শুনছি...', thinking: 'ভাবছি...', speaking: 'বলছি...',
     welcomeTitle: 'নমস্কার, আমি Senorita 💜',
     welcomeText: 'তোমার personal AI। মাইক চাপো বা নিচে টাইপ করো — যেকোনো ভাষায় জিজ্ঞাসা করো।',
     typePlaceholder: 'বার্তা লেখো...',
-    noSpeech: 'কিছু শুনিনি, আবার চেষ্টা করো',
-    needMic: 'মাইক permission দরকার',
-    keyNeeded: 'আগে Gemini API key দাও',
-    settingsSaved: 'Settings সেভ হয়েছে ✨',
-    voiceOn: 'ভয়েস ON',
-    voiceOff: 'ভয়েস OFF',
-    chatCleared: 'চ্যাট সাফ হয়েছে',
-    langSet: 'ভাষা: ',
-    confirmClear: 'চ্যাট সাফ করবে?'
+    noSpeech: 'কিছু শুনিনি, আবার চেষ্টা করো', needMic: 'মাইক permission দরকার',
+    keyNeeded: 'আগে Gemini API key দাও', settingsSaved: 'Settings সেভ হয়েছে ✨',
+    voiceOn: 'ভয়েস ON', voiceOff: 'ভয়েস OFF', chatCleared: 'চ্যাট সাফ হয়েছে',
+    langSet: 'ভাষা: ', confirmClear: 'চ্যাট সাফ করবে?'
   },
   ta: {
-    ready: 'தயார்',
-    listening: 'கேட்கிறேன்...',
-    thinking: 'யோசிக்கிறேன்...',
-    speaking: 'பேசுகிறேன்...',
+    ready: 'தயார்', listening: 'கேட்கிறேன்...', thinking: 'யோசிக்கிறேன்...', speaking: 'பேசுகிறேன்...',
     welcomeTitle: 'வணக்கம், நான் Senorita 💜',
     welcomeText: 'உங்கள் personal AI. மைக்கை அழுத்தவும் அல்லது கீழே தட்டச்சு செய்யவும் — எந்த மொழியிலும் கேளுங்கள்.',
     typePlaceholder: 'செய்தி எழுதுங்கள்...',
-    noSpeech: 'எதுவும் கேட்கவில்லை, மீண்டும் முயற்சி',
-    needMic: 'மைக் அனுமதி தேவை',
-    keyNeeded: 'முதலில் Gemini API key போடுங்கள்',
-    settingsSaved: 'Settings சேமிக்கப்பட்டது ✨',
-    voiceOn: 'குரல் ON',
-    voiceOff: 'குரல் OFF',
-    chatCleared: 'அரட்டை அழிக்கப்பட்டது',
-    langSet: 'மொழி: ',
-    confirmClear: 'அரட்டையை அழிக்கவா?'
+    noSpeech: 'எதுவும் கேட்கவில்லை, மீண்டும் முயற்சி', needMic: 'மைக் அனுமதி தேவை',
+    keyNeeded: 'முதலில் Gemini API key போடுங்கள்', settingsSaved: 'Settings சேமிக்கப்பட்டது ✨',
+    voiceOn: 'குரல் ON', voiceOff: 'குரல் OFF', chatCleared: 'அரட்டை அழிக்கப்பட்டது',
+    langSet: 'மொழி: ', confirmClear: 'அரட்டையை அழிக்கவா?'
   },
   te: {
-    ready: 'సిద్ధం',
-    listening: 'వింటున్నాను...',
-    thinking: 'ఆలోచిస్తున్నాను...',
-    speaking: 'మాట్లాడుతున్నాను...',
+    ready: 'సిద్ధం', listening: 'వింటున్నాను...', thinking: 'ఆలోచిస్తున్నాను...', speaking: 'మాట్లాడుతున్నాను...',
     welcomeTitle: 'నమస్కారం, నేను Senorita 💜',
     welcomeText: 'మీ personal AI. మైక్ నొక్కండి లేదా క్రింద టైప్ చేయండి — ఏ భాషలోనైనా అడగండి.',
     typePlaceholder: 'సందేశం టైప్ చేయండి...',
-    noSpeech: 'ఏమీ వినలేదు, మళ్ళీ ప్రయత్నించండి',
-    needMic: 'మైక్ అనుమతి కావాలి',
-    keyNeeded: 'ముందు Gemini API key పెట్టండి',
-    settingsSaved: 'Settings సేవ్ అయ్యాయి ✨',
-    voiceOn: 'వాయిస్ ON',
-    voiceOff: 'వాయిస్ OFF',
-    chatCleared: 'చాట్ క్లియర్ అయింది',
-    langSet: 'భాష: ',
-    confirmClear: 'చాట్ క్లియర్ చేయాలా?'
+    noSpeech: 'ఏమీ వినలేదు, మళ్ళీ ప్రయత్నించండి', needMic: 'మైక్ అనుమతి కావాలి',
+    keyNeeded: 'ముందు Gemini API key పెట్టండి', settingsSaved: 'Settings సేవ్ అయ్యాయి ✨',
+    voiceOn: 'వాయిస్ ON', voiceOff: 'వాయిస్ OFF', chatCleared: 'చాట్ క్లియర్ అయింది',
+    langSet: 'భాష: ', confirmClear: 'చాట్ క్లియర్ చేయాలా?'
   },
   mr: {
-    ready: 'तयार',
-    listening: 'ऐकत आहे...',
-    thinking: 'विचार करत आहे...',
-    speaking: 'बोलत आहे...',
+    ready: 'तयार', listening: 'ऐकत आहे...', thinking: 'विचार करत आहे...', speaking: 'बोलत आहे...',
     welcomeTitle: 'नमस्कार, मी Senorita 💜',
     welcomeText: 'तुमची personal AI. माइक दाबा किंवा खाली टाइप करा — कोणत्याही भाषेत विचारा.',
     typePlaceholder: 'संदेश लिहा...',
-    noSpeech: 'काही ऐकले नाही, पुन्हा प्रयत्न करा',
-    needMic: 'माइक permission हवी',
-    keyNeeded: 'आधी Gemini API key टाका',
-    settingsSaved: 'Settings सेव्ह झाल्या ✨',
-    voiceOn: 'आवाज ON',
-    voiceOff: 'आवाज OFF',
-    chatCleared: 'चॅट साफ झाली',
-    langSet: 'भाषा: ',
-    confirmClear: 'चॅट साफ करायची?'
+    noSpeech: 'काही ऐकले नाही, पुन्हा प्रयत्न करा', needMic: 'माइक permission हवी',
+    keyNeeded: 'आधी Gemini API key टाका', settingsSaved: 'Settings सेव्ह झाल्या ✨',
+    voiceOn: 'आवाज ON', voiceOff: 'आवाज OFF', chatCleared: 'चॅट साफ झाली',
+    langSet: 'भाषा: ', confirmClear: 'चॅट साफ करायची?'
   },
   gu: {
-    ready: 'તૈયાર',
-    listening: 'સાંભળી રહી છું...',
-    thinking: 'વિચારી રહી છું...',
-    speaking: 'બોલી રહી છું...',
+    ready: 'તૈયાર', listening: 'સાંભળી રહી છું...', thinking: 'વિચારી રહી છું...', speaking: 'બોલી રહી છું...',
     welcomeTitle: 'નમસ્તે, હું Senorita છું 💜',
     welcomeText: 'તમારી personal AI. માઇક દબાવો અથવા નીચે ટાઇપ કરો — કોઈપણ ભાષામાં પૂછો.',
     typePlaceholder: 'સંદેશ લખો...',
-    noSpeech: 'કંઈ સાંભળ્યું નહીં, ફરી પ્રયાસ કરો',
-    needMic: 'માઇક permission જોઈએ',
-    keyNeeded: 'પહેલા Gemini API key નાખો',
-    settingsSaved: 'Settings સેવ થઈ ✨',
-    voiceOn: 'અવાજ ON',
-    voiceOff: 'અવાજ OFF',
-    chatCleared: 'ચેટ સાફ થઈ',
-    langSet: 'ભાષા: ',
-    confirmClear: 'ચેટ સાફ કરવી?'
+    noSpeech: 'કંઈ સાંભળ્યું નહીં, ફરી પ્રયાસ કરો', needMic: 'માઇક permission જોઈએ',
+    keyNeeded: 'પહેલા Gemini API key નાખો', settingsSaved: 'Settings સેવ થઈ ✨',
+    voiceOn: 'અવાજ ON', voiceOff: 'અવાજ OFF', chatCleared: 'ચેટ સાફ થઈ',
+    langSet: 'ભાષા: ', confirmClear: 'ચેટ સાફ કરવી?'
   },
   kn: {
-    ready: 'ಸಿದ್ಧ',
-    listening: 'ಕೇಳುತ್ತಿದ್ದೇನೆ...',
-    thinking: 'ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...',
-    speaking: 'ಮಾತನಾಡುತ್ತಿದ್ದೇನೆ...',
+    ready: 'ಸಿದ್ಧ', listening: 'ಕೇಳುತ್ತಿದ್ದೇನೆ...', thinking: 'ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...', speaking: 'ಮಾತನಾಡುತ್ತಿದ್ದೇನೆ...',
     welcomeTitle: 'ನಮಸ್ಕಾರ, ನಾನು Senorita 💜',
     welcomeText: 'ನಿಮ್ಮ personal AI. ಮೈಕ್ ಒತ್ತಿರಿ ಅಥವಾ ಕೆಳಗೆ ಟೈಪ್ ಮಾಡಿ — ಯಾವುದೇ ಭಾಷೆಯಲ್ಲಿ ಕೇಳಿ.',
     typePlaceholder: 'ಸಂದೇಶ ಟೈಪ್ ಮಾಡಿ...',
-    noSpeech: 'ಏನೂ ಕೇಳಲಿಲ್ಲ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ',
-    needMic: 'ಮೈಕ್ permission ಬೇಕು',
-    keyNeeded: 'ಮೊದಲು Gemini API key ಹಾಕಿ',
-    settingsSaved: 'Settings ಉಳಿಸಲಾಗಿದೆ ✨',
-    voiceOn: 'ಧ್ವನಿ ON',
-    voiceOff: 'ಧ್ವನಿ OFF',
-    chatCleared: 'ಚಾಟ್ ತೆರವುಗೊಂಡಿದೆ',
-    langSet: 'ಭಾಷೆ: ',
-    confirmClear: 'ಚಾಟ್ ತೆರವು ಮಾಡುವುದೇ?'
+    noSpeech: 'ಏನೂ ಕೇಳಲಿಲ್ಲ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ', needMic: 'ಮೈಕ್ permission ಬೇಕು',
+    keyNeeded: 'ಮೊದಲು Gemini API key ಹಾಕಿ', settingsSaved: 'Settings ಉಳಿಸಲಾಗಿದೆ ✨',
+    voiceOn: 'ಧ್ವನಿ ON', voiceOff: 'ಧ್ವನಿ OFF', chatCleared: 'ಚಾಟ್ ತೆರವುಗೊಂಡಿದೆ',
+    langSet: 'ಭಾಷೆ: ', confirmClear: 'ಚಾಟ್ ತೆರವು ಮಾಡುವುದೇ?'
   },
   ml: {
-    ready: 'തയ്യാർ',
-    listening: 'കേൾക്കുന്നു...',
-    thinking: 'ചിന്തിക്കുന്നു...',
-    speaking: 'സംസാരിക്കുന്നു...',
+    ready: 'തയ്യാർ', listening: 'കേൾക്കുന്നു...', thinking: 'ചിന്തിക്കുന്നു...', speaking: 'സംസാരിക്കുന്നു...',
     welcomeTitle: 'നമസ്കാരം, ഞാൻ Senorita 💜',
     welcomeText: 'നിങ്ങളുടെ personal AI. മൈക്ക് അമർത്തുക അല്ലെങ്കിൽ താഴെ ടൈപ്പ് ചെയ്യുക — ഏത് ഭാഷയിലും ചോദിക്കുക.',
     typePlaceholder: 'സന്ദേശം ടൈപ്പ് ചെയ്യുക...',
-    noSpeech: 'ഒന്നും കേട്ടില്ല, വീണ്ടും ശ്രമിക്കുക',
-    needMic: 'മൈക്ക് permission വേണം',
-    keyNeeded: 'ആദ്യം Gemini API key ഇടുക',
-    settingsSaved: 'Settings സേവ് ചെയ്തു ✨',
-    voiceOn: 'ശബ്ദം ON',
-    voiceOff: 'ശബ്ദം OFF',
-    chatCleared: 'ചാറ്റ് മായ്ച്ചു',
-    langSet: 'ഭാഷ: ',
-    confirmClear: 'ചാറ്റ് മായ്ക്കണോ?'
+    noSpeech: 'ഒന്നും കേട്ടില്ല, വീണ്ടും ശ്രമിക്കുക', needMic: 'മൈക്ക് permission വേണം',
+    keyNeeded: 'ആദ്യം Gemini API key ഇടുക', settingsSaved: 'Settings സേവ് ചെയ്തു ✨',
+    voiceOn: 'ശബ്ദം ON', voiceOff: 'ശബ്ദം OFF', chatCleared: 'ചാറ്റ് മായ്ച്ചു',
+    langSet: 'ഭാഷ: ', confirmClear: 'ചാറ്റ് മായ്ക്കണോ?'
   },
   pa: {
-    ready: 'ਤਿਆਰ',
-    listening: 'ਸੁਣ ਰਹੀ ਹਾਂ...',
-    thinking: 'ਸੋਚ ਰਹੀ ਹਾਂ...',
-    speaking: 'ਬੋਲ ਰਹੀ ਹਾਂ...',
+    ready: 'ਤਿਆਰ', listening: 'ਸੁਣ ਰਹੀ ਹਾਂ...', thinking: 'ਸੋਚ ਰਹੀ ਹਾਂ...', speaking: 'ਬੋਲ ਰਹੀ ਹਾਂ...',
     welcomeTitle: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਮੈਂ Senorita ਹਾਂ 💜',
     welcomeText: 'ਤੁਹਾਡੀ personal AI। ਮਾਈਕ ਦਬਾਓ ਜਾਂ ਹੇਠਾਂ ਟਾਈਪ ਕਰੋ — ਕਿਸੇ ਵੀ ਭਾਸ਼ਾ ਵਿੱਚ ਪੁੱਛੋ।',
     typePlaceholder: 'ਸੁਨੇਹਾ ਲਿਖੋ...',
-    noSpeech: 'ਕੁਝ ਸੁਣਿਆ ਨਹੀਂ, ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ',
-    needMic: 'ਮਾਈਕ permission ਚਾਹੀਦੀ ਹੈ',
-    keyNeeded: 'ਪਹਿਲਾਂ Gemini API key ਪਾਓ',
-    settingsSaved: 'Settings ਸੇਵ ਹੋ ਗਈਆਂ ✨',
-    voiceOn: 'ਆਵਾਜ਼ ON',
-    voiceOff: 'ਆਵਾਜ਼ OFF',
-    chatCleared: 'ਚੈਟ ਸਾਫ਼ ਹੋ ਗਈ',
-    langSet: 'ਭਾਸ਼ਾ: ',
-    confirmClear: 'ਚੈਟ ਸਾਫ਼ ਕਰਨੀ ਹੈ?'
+    noSpeech: 'ਕੁਝ ਸੁਣਿਆ ਨਹੀਂ, ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ', needMic: 'ਮਾਈਕ permission ਚਾਹੀਦੀ ਹੈ',
+    keyNeeded: 'ਪਹਿਲਾਂ Gemini API key ਪਾਓ', settingsSaved: 'Settings ਸੇਵ ਹੋ ਗਈਆਂ ✨',
+    voiceOn: 'ਆਵਾਜ਼ ON', voiceOff: 'ਆਵਾਜ਼ OFF', chatCleared: 'ਚੈਟ ਸਾਫ਼ ਹੋ ਗਈ',
+    langSet: 'ਭਾਸ਼ਾ: ', confirmClear: 'ਚੈਟ ਸਾਫ਼ ਕਰਨੀ ਹੈ?'
   },
   ur: {
-    ready: 'تیار',
-    listening: 'سن رہی ہوں...',
-    thinking: 'سوچ رہی ہوں...',
-    speaking: 'بول رہی ہوں...',
+    ready: 'تیار', listening: 'سن رہی ہوں...', thinking: 'سوچ رہی ہوں...', speaking: 'بول رہی ہوں...',
     welcomeTitle: 'السلام علیکم، میں Senorita ہوں 💜',
     welcomeText: 'آپ کی personal AI۔ مائیک دبائیں یا نیچے ٹائپ کریں — کسی بھی زبان میں پوچھیں۔',
     typePlaceholder: 'پیغام لکھیں...',
-    noSpeech: 'کچھ سنا نہیں، دوبارہ کوشش کریں',
-    needMic: 'مائیک permission چاہیے',
-    keyNeeded: 'پہلے Gemini API key ڈالیں',
-    settingsSaved: 'Settings محفوظ ہو گئیں ✨',
-    voiceOn: 'آواز ON',
-    voiceOff: 'آواز OFF',
-    chatCleared: 'چیٹ صاف ہو گئی',
-    langSet: 'زبان: ',
-    confirmClear: 'چیٹ صاف کریں؟'
+    noSpeech: 'کچھ سنا نہیں، دوبارہ کوشش کریں', needMic: 'مائیک permission چاہیے',
+    keyNeeded: 'پہلے Gemini API key ڈالیں', settingsSaved: 'Settings محفوظ ہو گئیں ✨',
+    voiceOn: 'آواز ON', voiceOff: 'آواز OFF', chatCleared: 'چیٹ صاف ہو گئی',
+    langSet: 'زبان: ', confirmClear: 'چیٹ صاف کریں؟'
   }
 };
 
@@ -687,26 +595,12 @@ function t(key) {
   return (UI[code] && UI[code][key]) || UI.en[key];
 }
 
-/* ═══════════════════════════════════════════
-   🎭  PERSONAS
-   ═══════════════════════════════════════════ */
+/* ═══ PERSONAS ═══ */
 const PERSONAS = {
-  friend: {
-    label: 'Friend Mode',
-    prompt: `You are Senorita, a friendly, warm AI companion for an Indian user. Talk casually like a close friend — mix Hindi and English naturally (Hinglish). Be supportive, use emojis occasionally, keep replies short (2-4 lines usually). Reply in whatever language the user speaks.`
-  },
-  teacher: {
-    label: 'Teacher Mode',
-    prompt: `You are Senorita, a patient and brilliant teacher. Explain concepts clearly with examples and step-by-step breakdowns. Structure your answer. Use the user's language. Be thorough but not boring.`
-  },
-  expert: {
-    label: 'Expert Mode',
-    prompt: `You are Senorita, a highly knowledgeable expert assistant. Give precise, professional, well-researched answers. No fluff. Reply in the user's language.`
-  },
-  funny: {
-    label: 'Funny Mode',
-    prompt: `You are Senorita, a witty, humorous AI. Crack jokes, use light sarcasm, puns — but still answer correctly. Reply in the user's language, culturally relevant to India. Keep it punchy.`
-  }
+  friend: { label: 'Friend Mode', prompt: `You are Senorita, a friendly, warm AI companion for an Indian user. Talk casually like a close friend — mix Hindi and English naturally (Hinglish). Be supportive, use emojis occasionally, keep replies short (2-4 lines usually). Reply in whatever language the user speaks.` },
+  teacher: { label: 'Teacher Mode', prompt: `You are Senorita, a patient and brilliant teacher. Explain concepts clearly with examples and step-by-step breakdowns. Structure your answer. Use the user's language. Be thorough but not boring.` },
+  expert: { label: 'Expert Mode', prompt: `You are Senorita, a highly knowledgeable expert assistant. Give precise, professional, well-researched answers. No fluff. Reply in the user's language.` },
+  funny: { label: 'Funny Mode', prompt: `You are Senorita, a witty, humorous AI. Crack jokes, use light sarcasm, puns — but still answer correctly. Reply in the user's language, culturally relevant to India. Keep it punchy.` }
 };
 
 const LANGS = {
@@ -740,9 +634,6 @@ const sheet = $('sheet'), sheetBg = $('sheetBg');
 const nameInput = $('nameInput'), keyInput = $('keyInput');
 const textInput = $('textInput'), sendBtn = $('sendBtn');
 
-/* ═══════════════════════════════════════════
-   🎯  INIT
-   ═══════════════════════════════════════════ */
 function init() {
   $('brandName').textContent = state.name;
   $('personaLabel').textContent = PERSONAS[state.persona].label;
@@ -762,7 +653,6 @@ function init() {
   statusText.textContent = t('ready');
   textInput.placeholder = t('typePlaceholder');
 
-  // Welcome text update
   const wt = $('welcomeTitle'), wp = $('welcomeText');
   if (wt) wt.textContent = t('welcomeTitle');
   if (wp) wp.textContent = t('welcomeText');
@@ -776,9 +666,6 @@ function init() {
   }
 }
 
-/* ═══════════════════════════════════════════
-   🎬  UI HELPERS
-   ═══════════════════════════════════════════ */
 function setStatus(mode='') {
   const map = { '': 'ready', listening: 'listening', thinking: 'thinking', speaking: 'speaking' };
   statusText.textContent = t(map[mode] || 'ready');
@@ -809,9 +696,6 @@ function addMsg(role, text) {
   return el;
 }
 
-/* ═══════════════════════════════════════════
-   🎤  SPEECH RECOGNITION
-   ═══════════════════════════════════════════ */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recog = null, isListening = false, finalText = '', interimEl = null;
 
@@ -876,10 +760,7 @@ function cleanup() {
 }
 
 function startListening() {
-  if (!recog) {
-    showToast('Browser me speech support nahi hai');
-    return;
-  }
+  if (!recog) { showToast('Speech recognition not supported'); return; }
   if (!getKey()) {
     showToast(t('keyNeeded'));
     sheet.classList.add('open');
@@ -893,9 +774,6 @@ function startListening() {
   catch (e) { console.warn(e); }
 }
 
-/* ═══════════════════════════════════════════
-   💬  TEXT MESSAGE
-   ═══════════════════════════════════════════ */
 function sendText() {
   const text = textInput.value.trim();
   if (!text) return;
@@ -916,9 +794,6 @@ textInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') { e.preventDefault(); sendText(); }
 });
 
-/* ═══════════════════════════════════════════
-   🧠  GEMINI STREAMING
-   ═══════════════════════════════════════════ */
 async function askAI(prompt) {
   const GEMINI_KEY = getKey();
   if (!GEMINI_KEY) {
@@ -1008,9 +883,6 @@ function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* ═══════════════════════════════════════════
-   🔊  TEXT-TO-SPEECH
-   ═══════════════════════════════════════════ */
 function speak(text) {
   if (state.muted || !('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
@@ -1033,13 +905,9 @@ function speak(text) {
 
   u.onstart = () => setStatus('speaking');
   u.onend = () => setStatus();
-
   speechSynthesis.speak(u);
 }
 
-/* ═══════════════════════════════════════════
-   🎛️  EVENTS
-   ═══════════════════════════════════════════ */
 orb.addEventListener('click', startListening);
 
 document.querySelectorAll('.chip').forEach(c => {
@@ -1079,7 +947,6 @@ document.querySelectorAll('#langGrid .lang-btn').forEach(o => {
     document.querySelectorAll('#langGrid .lang-btn').forEach(x => x.classList.remove('active'));
     o.classList.add('active');
     state.lang = o.dataset.l;
-    // Update UI text live preview
     statusText.textContent = t('ready');
     textInput.placeholder = t('typePlaceholder');
     $('muteBtn').textContent = state.muted ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
