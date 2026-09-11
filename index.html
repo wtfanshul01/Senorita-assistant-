@@ -46,7 +46,6 @@ body::after{
   display:flex;flex-direction:column;max-width:560px;margin:0 auto;
   padding-top:env(safe-area-inset-top);
 }
-/* ─── Header ─── */
 .header{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 22px;position:relative;
@@ -68,19 +67,12 @@ body::after{
 }
 .mark span{
   position:relative;z-index:1;font-size:15px;font-weight:700;
-  font-family:'SF Pro Display',system-ui,sans-serif;
   background:linear-gradient(135deg,#f4f1f8,#a855f7);
   -webkit-background-clip:text;background-clip:text;color:transparent;
   letter-spacing:-0.5px;
 }
-.identity h1{
-  font-size:15.5px;font-weight:600;letter-spacing:-0.2px;
-  color:var(--ink);
-}
-.identity p{
-  font-size:10px;color:var(--muted);letter-spacing:1.6px;
-  text-transform:uppercase;margin-top:2px;font-weight:500;
-}
+.identity h1{font-size:15.5px;font-weight:600;letter-spacing:-0.2px;color:var(--ink)}
+.identity p{font-size:10px;color:var(--muted);letter-spacing:1.6px;text-transform:uppercase;margin-top:2px;font-weight:500}
 .actions{display:flex;gap:8px}
 .ibtn{
   width:38px;height:38px;border-radius:12px;
@@ -89,10 +81,7 @@ body::after{
   cursor:pointer;transition:all 0.18s;font-size:14px;
 }
 .ibtn:active{transform:scale(0.92);background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.3)}
-/* ─── Status ─── */
-.status{
-  padding:14px 22px 6px;display:flex;justify-content:center;
-}
+.status{padding:14px 22px 6px;display:flex;justify-content:center}
 .pill{
   display:inline-flex;align-items:center;gap:8px;
   padding:6px 14px;border-radius:100px;
@@ -100,15 +89,11 @@ body::after{
   font-size:11px;color:var(--muted);font-weight:500;
   letter-spacing:0.2px;transition:all 0.35s;
 }
-.pill .d{
-  width:5px;height:5px;border-radius:50%;background:var(--ok);
-  box-shadow:0 0 8px var(--ok);transition:all 0.3s;
-}
+.pill .d{width:5px;height:5px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);transition:all 0.3s}
 .pill.listening .d{background:var(--danger);box-shadow:0 0 10px var(--danger);animation:blink 1s infinite}
 .pill.thinking .d{background:var(--violet);box-shadow:0 0 10px var(--violet);animation:blink 0.7s infinite}
 .pill.speaking .d{background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink 0.9s infinite}
 @keyframes blink{50%{opacity:0.35}}
-/* ─── Chat ─── */
 .stream{
   flex:1;overflow-y:auto;padding:10px 22px 8px;
   display:flex;flex-direction:column;gap:14px;
@@ -116,14 +101,11 @@ body::after{
 }
 .stream::-webkit-scrollbar{width:0}
 .hero{margin:auto;text-align:center;padding:20px 10px;max-width:340px}
-.hero-ring{
-  width:110px;height:110px;margin:0 auto 28px;position:relative;
-}
+.hero-ring{width:110px;height:110px;margin:0 auto 28px;position:relative}
 .hero-ring::before{
   content:'';position:absolute;inset:0;border-radius:50%;
   background:conic-gradient(from 0deg,transparent,#a855f7,#f472b6,#22d3ee,transparent);
-  animation:spin 6s linear infinite;
-  filter:blur(2px);opacity:0.85;
+  animation:spin 6s linear infinite;filter:blur(2px);opacity:0.85;
 }
 .hero-ring::after{
   content:'';position:absolute;inset:3px;border-radius:50%;
@@ -142,25 +124,19 @@ body::after{
   background:linear-gradient(135deg,#f4f1f8 20%,#a855f7 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.hero p{
-  color:var(--muted);font-size:13.5px;line-height:1.6;font-weight:400;
-}
-.suggest{
-  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:26px;
-}
+.hero p{color:var(--muted);font-size:13.5px;line-height:1.6}
+.suggest{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:26px}
 .sg{
   padding:9px 15px;border-radius:100px;
   background:var(--dim);border:1px solid var(--line);
   color:var(--ink);font-size:12.5px;cursor:pointer;
-  transition:all 0.18s;font-weight:500;letter-spacing:-0.1px;
+  transition:all 0.18s;font-weight:500;
 }
 .sg:active{background:rgba(168,85,247,0.14);border-color:rgba(168,85,247,0.35);transform:scale(0.97)}
-/* ─── Messages ─── */
 .m{
   max-width:84%;padding:13px 17px;border-radius:22px;
   font-size:15px;line-height:1.55;word-wrap:break-word;white-space:pre-wrap;
   animation:mIn 0.32s cubic-bezier(0.34,1.4,0.64,1);
-  letter-spacing:-0.005em;
 }
 @keyframes mIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .m.u{
@@ -172,10 +148,8 @@ body::after{
 .m.bot{
   align-self:flex-start;
   background:linear-gradient(160deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025));
-  border:1px solid var(--line);
-  border-bottom-left-radius:8px;
-  backdrop-filter:blur(20px);
-  position:relative;
+  border:1px solid var(--line);border-bottom-left-radius:8px;
+  backdrop-filter:blur(20px);position:relative;
 }
 .m.bot::before{
   content:'';position:absolute;left:0;top:12px;bottom:12px;width:2px;
@@ -193,14 +167,12 @@ body::after{
   background:var(--violet);margin-left:3px;vertical-align:middle;
   border-radius:1.5px;animation:blink 1s infinite;
 }
-/* ─── Composer ─── */
 .compose{padding:10px 20px 4px}
 .cwrap{
   display:flex;gap:9px;align-items:center;
   background:linear-gradient(160deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));
   border:1px solid var(--line2);border-radius:100px;
-  padding:5px 5px 5px 20px;
-  transition:all 0.25s;
+  padding:5px 5px 5px 20px;transition:all 0.25s;
 }
 .cwrap:focus-within{
   border-color:rgba(168,85,247,0.5);
@@ -210,7 +182,7 @@ body::after{
 .cwrap input{
   flex:1;background:transparent;border:none;outline:none;
   color:var(--ink);font-family:inherit;font-size:14.5px;
-  padding:10px 0;letter-spacing:-0.005em;
+  padding:10px 0;
 }
 .cwrap input::placeholder{color:var(--muted)}
 .send{
@@ -221,7 +193,6 @@ body::after{
   transition:transform 0.15s;
 }
 .send:active{transform:scale(0.9)}
-/* ─── Voice Dock ─── */
 .dock{
   padding:8px 20px calc(22px + env(safe-area-inset-bottom));
   display:flex;flex-direction:column;align-items:center;gap:11px;
@@ -250,10 +221,7 @@ body::after{
   width:72px;height:72px;border-radius:50%;border:none;
   background:radial-gradient(circle at 32% 28%,#b975ff,#7c3aed 55%,#4c1d95);
   color:#fff;cursor:pointer;display:grid;place-items:center;
-  box-shadow:
-    0 0 30px -5px rgba(168,85,247,0.65),
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    inset 0 -8px 20px rgba(0,0,0,0.35);
+  box-shadow:0 0 30px -5px rgba(168,85,247,0.65),inset 0 1px 0 rgba(255,255,255,0.25),inset 0 -8px 20px rgba(0,0,0,0.35);
   transition:transform 0.2s,box-shadow 0.3s;
   position:relative;z-index:1;
 }
@@ -278,7 +246,6 @@ body::after{
 .mini{display:flex;gap:14px;align-items:center;font-size:11px;color:var(--muted);font-weight:500}
 .mini button{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:5px 8px;border-radius:8px;font-family:inherit;font-weight:500;transition:all 0.2s}
 .mini button:active{background:var(--dim);color:var(--ink)}
-/* ─── Settings Sheet ─── */
 .backdrop{
   position:fixed;inset:0;background:rgba(4,2,8,0.7);
   backdrop-filter:blur(8px);z-index:50;opacity:0;pointer-events:none;transition:opacity 0.3s;
@@ -298,10 +265,7 @@ body::after{
 .sheet.on{transform:translateY(0)}
 .handle{width:40px;height:4px;border-radius:100px;background:rgba(255,255,255,0.15);margin:0 auto 26px}
 .sec{margin-bottom:26px}
-.sec h3{
-  font-size:11.5px;font-weight:600;margin-bottom:13px;
-  color:var(--muted);letter-spacing:1.4px;text-transform:uppercase;
-}
+.sec h3{font-size:11.5px;font-weight:600;margin-bottom:13px;color:var(--muted);letter-spacing:1.4px;text-transform:uppercase}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .opt{
   padding:14px 15px;border-radius:14px;
@@ -315,7 +279,7 @@ body::after{
   border-color:rgba(168,85,247,0.5);
   box-shadow:0 0 22px -8px rgba(168,85,247,0.5);
 }
-.opt .ot{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;letter-spacing:-0.1px}
+.opt .ot{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
 .opt .od{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.4}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .lb{
@@ -332,7 +296,7 @@ body::after{
   width:100%;padding:16px;border-radius:16px;border:none;
   background:linear-gradient(135deg,#a855f7,#f472b6);
   color:#fff;font-weight:600;font-size:14.5px;cursor:pointer;
-  font-family:inherit;letter-spacing:-0.1px;
+  font-family:inherit;
   box-shadow:0 10px 28px -10px rgba(168,85,247,0.8);
   transition:transform 0.15s;
 }
@@ -488,31 +452,35 @@ body::after{
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══ CONFIG — Working Gemini models, in order ═══ */
-const MODELS = ['gemini-2.5-flash','gemini-2.0-flash','gemini-1.5-flash'];
+/* ═══ CONFIG — Working models with latest alias ═══ */
+const MODELS = [
+  'gemini-flash-latest',
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-pro-latest'
+];
 
 function getKey(){ return localStorage.getItem('senorita_key') || ''; }
 
-/* ═══ UI Strings (compact) ═══ */
 const UI = {
   en:{ready:'Ready',listening:'Listening',thinking:'Thinking',speaking:'Speaking',
     hi:"Hi, I'm Senorita",hs:'Ask anything — clear and accurate answers, in any language.',
     ph:'Ask anything...',ns:"Didn't catch that",nm:'Mic permission needed',
     nk:'Add your API key first',ss:'Saved',on:'Voice On',off:'Voice Off',
-    cc:'Chat cleared',ls:'Language: ',cq:'Clear chat?',busy:'Server busy, retrying'},
+    cc:'Chat cleared',ls:'Language: ',cq:'Clear chat?',busy:'Server busy'},
   hi:{ready:'तैयार',listening:'सुन रही हूँ',thinking:'सोच रही हूँ',speaking:'बोल रही हूँ',
     hi:'नमस्ते, मैं Senorita हूँ',hs:'कुछ भी पूछो — साफ़ और सटीक जवाब।',
     ph:'कुछ भी पूछो...',ns:'कुछ सुना नहीं',nm:'माइक permission चाहिए',
     nk:'पहले API key डालो',ss:'सेव हो गया',on:'आवाज़ चालू',off:'आवाज़ बंद',
-    cc:'चैट साफ़',ls:'भाषा: ',cq:'चैट साफ़ करें?',busy:'सर्वर व्यस्त, फिर कोशिश'},
+    cc:'चैट साफ़',ls:'भाषा: ',cq:'चैट साफ़ करें?',busy:'सर्वर व्यस्त'},
   bn:{ready:'প্রস্তুত',listening:'শুনছি',thinking:'ভাবছি',speaking:'বলছি',
     hi:'নমস্কার, আমি Senorita',hs:'যেকোনো কিছু জিজ্ঞাসা করো — স্পষ্ট উত্তর।',
-    ph:'কিছু জিজ্ঞাসা করো...',ns:'কিছু শুনিনি',nm:'মাইক permission দরকার',
+    ph:'জিজ্ঞাসা করো...',ns:'শুনিনি',nm:'মাইক permission',
     nk:'আগে API key দাও',ss:'সেভ হয়েছে',on:'ভয়েস চালু',off:'ভয়েস বন্ধ',
-    cc:'চ্যাট সাফ',ls:'ভাষা: ',cq:'চ্যাট সাফ করবে?',busy:'সার্ভার ব্যস্ত'},
+    cc:'চ্যাট সাফ',ls:'ভাষা: ',cq:'সাফ করবে?',busy:'সার্ভার ব্যস্ত'},
   ta:{ready:'தயார்',listening:'கேட்கிறேன்',thinking:'யோசிக்கிறேன்',speaking:'பேசுகிறேன்',
     hi:'வணக்கம், நான் Senorita',hs:'எதையும் கேளுங்கள் — தெளிவான பதில்.',
-    ph:'கேளுங்கள்...',ns:'கேட்கவில்லை',nm:'மைக் அனுமதி தேவை',
+    ph:'கேளுங்கள்...',ns:'கேட்கவில்லை',nm:'மைக் அனுமதி',
     nk:'முதலில் API key',ss:'சேமிக்கப்பட்டது',on:'குரல் இயக்கம்',off:'குரல் அணைப்பு',
     cc:'அரட்டை அழிக்கப்பட்டது',ls:'மொழி: ',cq:'அழிக்கவா?',busy:'சர்வர் பிஸி'},
   te:{ready:'సిద్ధం',listening:'వింటున్నాను',thinking:'ఆలోచిస్తున్నాను',speaking:'మాట్లాడుతున్నాను',
@@ -557,7 +525,6 @@ function t(k){
   return (UI[c] && UI[c][k]) || UI.en[k];
 }
 
-/* ═══ PERSONAS — strict, no fluff ═══ */
 const P = {
   concise: { label:'Concise', sys:`You are Senorita — a sharp, accurate AI assistant.
 RULES:
@@ -613,7 +580,6 @@ const hero=$('hero'), toast=$('toast');
 const sheet=$('sheet'), bd=$('bd');
 const ti=$('ti'), sb=$('sb');
 
-/* ═══ INIT ═══ */
 function init(){
   $('bName').textContent = state.name;
   $('bMode').textContent = P[state.persona].label;
@@ -669,7 +635,6 @@ function addMsg(role, text){
   return el;
 }
 
-/* ═══ STT ═══ */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recog=null, listening=false, finalTxt='', liveEl=null;
 
@@ -738,7 +703,6 @@ function startMic(){
   try{ recog.start(); } catch(e){ console.warn(e); }
 }
 
-/* ═══ SEND TEXT ═══ */
 function send(){
   const v = ti.value.trim();
   if(!v) return;
@@ -757,7 +721,6 @@ ti.addEventListener('keydown', e => {
   if(e.key === 'Enter'){ e.preventDefault(); send(); }
 });
 
-/* ═══ GEMINI CALL — with model fallback + clear errors ═══ */
 async function ask(prompt){
   const key = getKey();
   if(!key){
@@ -788,7 +751,7 @@ async function ask(prompt){
 
   let full = '';
   let err = null;
-  let succeeded = false;
+  let ok = false;
 
   for(const model of MODELS){
     try{
@@ -802,7 +765,6 @@ async function ask(prompt){
       if(!res.ok){
         const txt = await res.text();
         err = new Error(res.status + ': ' + txt.slice(0, 150));
-        // 404 or 400 → this model doesn't exist / bad request. Try next.
         continue;
       }
 
@@ -832,10 +794,9 @@ async function ask(prompt){
       }
 
       if(full.trim().length > 0){
-        succeeded = true;
+        ok = true;
         break;
       }
-      // If empty response, try next model
       err = new Error('Empty response');
       continue;
 
@@ -845,7 +806,7 @@ async function ask(prompt){
     }
   }
 
-  if(succeeded){
+  if(ok){
     botEl.textContent = full;
     state.history.push({ role:'model', parts:[{text: full}] });
     setStatus();
@@ -860,7 +821,6 @@ function escape(s){
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-/* ═══ VOICE — best female voice ═══ */
 let voices = [];
 function loadV(){ voices = speechSynthesis.getVoices() || []; }
 
@@ -870,22 +830,16 @@ function bestVoice(lang){
   const female = ['neerja','swara','female','woman','samantha','zira','aria','jenny'];
   const brand  = ['google','microsoft'];
 
-  // 1: exact lang + female keyword
   let v = voices.find(x => x.lang === lang && female.some(f => x.name.toLowerCase().includes(f)));
   if(v) return v;
-  // 2: exact lang + google/microsoft
   v = voices.find(x => x.lang === lang && brand.some(b => x.name.toLowerCase().includes(b)));
   if(v) return v;
-  // 3: exact lang
   v = voices.find(x => x.lang === lang);
   if(v) return v;
-  // 4: base + female
   v = voices.find(x => x.lang.startsWith(base) && female.some(f => x.name.toLowerCase().includes(f)));
   if(v) return v;
-  // 5: base
   v = voices.find(x => x.lang.startsWith(base));
   if(v) return v;
-  // 6: Hindi fallback
   v = voices.find(x => x.lang.startsWith('hi'));
   if(v) return v;
   return null;
@@ -901,7 +855,6 @@ function speak(text){
   const speech = clean.length > 400 ? clean.slice(0, 400) : clean;
   const u = new SpeechSynthesisUtterance(speech);
 
-  // Detect script if auto
   let tl = LANGS[state.lang].tts;
   if(state.lang === 'auto'){
     if(/[\u0900-\u097F]/.test(text)) tl = 'hi-IN';
@@ -930,7 +883,6 @@ function speak(text){
   speechSynthesis.speak(u);
 }
 
-/* ═══ EVENTS ═══ */
 orbBtn.addEventListener('click', startMic);
 
 document.querySelectorAll('.sg').forEach(c => {
