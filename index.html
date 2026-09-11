@@ -9,11 +9,10 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 :root{
-  --bg:#0a0612;--bg2:#0f0a1a;
-  --surface:rgba(255,255,255,0.04);
-  --border:rgba(255,255,255,0.08);
-  --text:#ece9f5;--muted:#8b86a0;
-  --accent:#a855f7;--accent2:#06b6d4;--accent3:#f472b6;
+  --bg:#08050f;--surface:rgba(255,255,255,0.045);
+  --border:rgba(255,255,255,0.07);
+  --text:#f0edf7;--muted:#7f7a92;
+  --accent:#a855f7;--accent2:#06b6d4;
   --user:#7c3aed;--danger:#ef4444;--ok:#10b981;
 }
 html,body{height:100%;overflow:hidden}
@@ -21,19 +20,19 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   background:var(--bg);color:var(--text);
   position:relative;overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
 }
 body::before{
   content:'';position:fixed;inset:-50%;z-index:0;
   background:
-    radial-gradient(circle at 20% 20%,rgba(168,85,247,0.15),transparent 40%),
-    radial-gradient(circle at 80% 30%,rgba(6,182,212,0.12),transparent 40%),
-    radial-gradient(circle at 50% 90%,rgba(244,114,182,0.1),transparent 45%);
-  animation:aurora 20s ease-in-out infinite;pointer-events:none;
+    radial-gradient(circle at 15% 15%,rgba(168,85,247,0.12),transparent 45%),
+    radial-gradient(circle at 85% 25%,rgba(6,182,212,0.08),transparent 45%),
+    radial-gradient(circle at 50% 95%,rgba(244,114,182,0.08),transparent 50%);
+  animation:aurora 24s ease-in-out infinite;pointer-events:none;
 }
 @keyframes aurora{
   0%,100%{transform:translate(0,0) scale(1)}
-  33%{transform:translate(5%,-3%) scale(1.1)}
-  66%{transform:translate(-3%,4%) scale(0.95)}
+  50%{transform:translate(4%,-3%) scale(1.08)}
 }
 .app{
   position:relative;z-index:1;
@@ -42,50 +41,53 @@ body::before{
   max-width:560px;margin:0 auto;
   padding-top:env(safe-area-inset-top);
 }
+/* ── Header ── */
 .header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;backdrop-filter:blur(20px);
-  background:linear-gradient(180deg,rgba(10,6,18,0.9),rgba(10,6,18,0.4));
+  padding:16px 20px;
+  background:linear-gradient(180deg,rgba(8,5,15,0.92),rgba(8,5,15,0.3));
+  backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
 }
-.brand{display:flex;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:12px}
 .logo{
-  width:36px;height:36px;border-radius:12px;
+  width:38px;height:38px;border-radius:12px;
   background:conic-gradient(from 0deg,#a855f7,#06b6d4,#f472b6,#a855f7);
   display:grid;place-items:center;position:relative;
-  box-shadow:0 0 20px rgba(168,85,247,0.5);
-  animation:spin 8s linear infinite;
+  box-shadow:0 4px 18px rgba(168,85,247,0.45);
+  animation:spin 10s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .logo::after{
   content:'';position:absolute;inset:3px;border-radius:9px;
-  background:var(--bg);animation:spin 8s linear infinite reverse;
+  background:var(--bg);animation:spin 10s linear infinite reverse;
 }
 .logo span{
   position:relative;z-index:1;font-size:16px;font-weight:800;
-  background:linear-gradient(135deg,#a855f7,#06b6d4);
+  background:linear-gradient(135deg,#c084fc,#22d3ee);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
 .brand-info h1{
-  font-size:15px;font-weight:700;letter-spacing:0.5px;
+  font-size:15px;font-weight:700;letter-spacing:0.3px;
   background:linear-gradient(135deg,#fff,#a855f7);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.brand-info p{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+.brand-info p{font-size:9.5px;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase;margin-top:2px}
 .header-actions{display:flex;gap:8px}
 .icon-btn{
   width:38px;height:38px;border-radius:11px;
   background:var(--surface);border:1px solid var(--border);
   color:var(--text);display:grid;place-items:center;
-  cursor:pointer;transition:all 0.2s;font-size:16px;
+  cursor:pointer;transition:all 0.2s;font-size:15px;
 }
 .icon-btn:active{transform:scale(0.9);background:rgba(168,85,247,0.2)}
-.status-bar{padding:8px 18px;display:flex;justify-content:center}
+/* ── Status ── */
+.status-bar{padding:12px 20px;display:flex;justify-content:center}
 .status-chip{
   display:inline-flex;align-items:center;gap:8px;
-  padding:5px 12px;border-radius:20px;
+  padding:6px 14px;border-radius:20px;
   background:var(--surface);border:1px solid var(--border);
-  font-size:11px;color:var(--muted);letter-spacing:0.5px;
+  font-size:11px;color:var(--muted);letter-spacing:0.4px;
   transition:all 0.3s;
 }
 .status-chip .dot{
@@ -96,50 +98,53 @@ body::before{
 .status-chip.thinking .dot{background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 0.6s infinite}
 .status-chip.speaking .dot{background:var(--accent2);box-shadow:0 0 8px var(--accent2);animation:blink 0.8s infinite}
 @keyframes blink{50%{opacity:0.3}}
+/* ── Chat ── */
 .chat{
   flex:1;overflow-y:auto;
-  padding:12px 16px 8px;
-  display:flex;flex-direction:column;gap:10px;
+  padding:8px 20px 16px;
+  display:flex;flex-direction:column;gap:16px;
   scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
 }
 .chat::-webkit-scrollbar{width:0}
-.welcome{margin:auto;text-align:center;padding:20px}
+.welcome{margin:auto;text-align:center;padding:24px 12px}
 .welcome-orb{
-  width:100px;height:100px;margin:0 auto 20px;border-radius:50%;
+  width:96px;height:96px;margin:0 auto 24px;border-radius:50%;
   background:conic-gradient(from 0deg,#a855f7,#06b6d4,#f472b6,#a855f7);
-  position:relative;animation:spin 6s linear infinite;
-  filter:blur(0.5px);opacity:0.9;
+  position:relative;animation:spin 8s linear infinite;
+  opacity:0.95;
 }
 .welcome-orb::after{
-  content:'';position:absolute;inset:6px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#1a0f2e,#0a0612);
+  content:'';position:absolute;inset:5px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#1a0f2e,#08050f);
 }
 .welcome h2{
-  font-size:22px;font-weight:700;margin-bottom:8px;
+  font-size:24px;font-weight:700;margin-bottom:10px;letter-spacing:-0.3px;
   background:linear-gradient(135deg,#fff,#a855f7,#06b6d4);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.welcome p{color:var(--muted);font-size:13px;line-height:1.6;max-width:280px;margin:0 auto}
+.welcome p{color:var(--muted);font-size:13.5px;line-height:1.65;max-width:300px;margin:0 auto}
 .welcome-chips{
-  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px;
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:28px;
 }
 .chip{
-  padding:7px 14px;border-radius:20px;
+  padding:8px 16px;border-radius:20px;
   background:var(--surface);border:1px solid var(--border);
   color:var(--text);font-size:12px;cursor:pointer;transition:all 0.2s;
 }
 .chip:active{background:rgba(168,85,247,0.2);border-color:var(--accent)}
+/* ── Messages ── */
 .msg{
-  max-width:85%;padding:11px 15px;border-radius:18px;
-  font-size:14.5px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap;
-  animation:msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1);position:relative;
+  max-width:82%;padding:13px 17px;border-radius:20px;
+  font-size:15px;line-height:1.55;word-wrap:break-word;white-space:pre-wrap;
+  animation:msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;letter-spacing:0.1px;
 }
 @keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 .msg.user{
   align-self:flex-end;
   background:linear-gradient(135deg,#7c3aed,#a855f7);
   color:white;border-bottom-right-radius:6px;
-  box-shadow:0 4px 15px rgba(124,58,237,0.3);
+  box-shadow:0 4px 16px rgba(124,58,237,0.3);
 }
 .msg.ai{
   align-self:flex-start;
@@ -148,7 +153,7 @@ body::before{
   backdrop-filter:blur(10px);
 }
 .msg.ai::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  content:'';position:absolute;left:0;top:8px;bottom:8px;width:2.5px;
   background:linear-gradient(180deg,#a855f7,#06b6d4);
   border-radius:18px 0 0 18px;
 }
@@ -160,75 +165,78 @@ body::before{
 }
 .cursor{
   display:inline-block;width:7px;height:14px;
-  background:var(--accent);margin-left:2px;vertical-align:middle;
-  animation:blink 1s infinite;
+  background:var(--accent);margin-left:3px;vertical-align:middle;
+  animation:blink 1s infinite;border-radius:1px;
 }
+/* ── Text Input ── */
 .text-row{
-  padding:8px 16px 4px;display:flex;gap:8px;align-items:center;
+  padding:10px 20px 6px;display:flex;gap:10px;align-items:center;
 }
 .text-row input{
-  flex:1;padding:12px 16px;border-radius:24px;
-  background:var(--surface);border:1px solid var(--border);
-  color:var(--text);font-family:inherit;font-size:14px;outline:none;
+  flex:1;padding:14px 18px;border-radius:26px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  color:var(--text);font-family:inherit;font-size:14.5px;outline:none;
   transition:all 0.2s;
 }
-.text-row input:focus{border-color:var(--accent);box-shadow:0 0 15px rgba(168,85,247,0.2)}
+.text-row input:focus{border-color:var(--accent);box-shadow:0 0 20px rgba(168,85,247,0.2);background:rgba(255,255,255,0.07)}
 .text-row input::placeholder{color:var(--muted)}
 .send-btn{
-  width:44px;height:44px;border-radius:50%;border:none;
+  width:46px;height:46px;border-radius:50%;border:none;
   background:linear-gradient(135deg,#a855f7,#06b6d4);
-  color:white;font-size:16px;cursor:pointer;
+  color:white;cursor:pointer;flex-shrink:0;
   display:grid;place-items:center;
-  box-shadow:0 4px 15px rgba(168,85,247,0.4);
+  box-shadow:0 4px 16px rgba(168,85,247,0.4);
   transition:transform 0.15s;
 }
 .send-btn:active{transform:scale(0.9)}
-.send-btn:disabled{opacity:0.5}
+/* ── Voice Orb ── */
 .orb-area{
-  padding:8px 16px calc(20px + env(safe-area-inset-bottom));
-  display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;
+  padding:10px 20px calc(24px + env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  position:relative;
 }
-.orb-wrap{position:relative;width:100px;height:100px;display:grid;place-items:center}
+.orb-wrap{position:relative;width:104px;height:104px;display:grid;place-items:center}
 .orb-ring{
   position:absolute;inset:0;border-radius:50%;border:2px solid transparent;
   background:conic-gradient(from 0deg,#a855f7,#06b6d4,#f472b6,#a855f7) border-box;
   -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
   -webkit-mask-composite:xor;mask-composite:exclude;
-  animation:spin 4s linear infinite;opacity:0.7;
+  animation:spin 5s linear infinite;opacity:0.55;
 }
 .orb-ring2{
-  position:absolute;inset:-8px;border-radius:50%;
-  border:1px solid rgba(168,85,247,0.3);
-  animation:spin 8s linear infinite reverse;
+  position:absolute;inset:-10px;border-radius:50%;
+  border:1px solid rgba(168,85,247,0.2);
+  animation:spin 10s linear infinite reverse;
 }
 .orb{
   width:78px;height:78px;border-radius:50%;
   background:radial-gradient(circle at 30% 30%,#a855f7,#6d28d9 60%,#4c1d95);
   position:relative;cursor:pointer;display:grid;place-items:center;
-  box-shadow:0 0 30px rgba(168,85,247,0.5),inset 0 0 20px rgba(255,255,255,0.15);
+  box-shadow:0 0 32px rgba(168,85,247,0.5),inset 0 0 20px rgba(255,255,255,0.15);
   transition:all 0.3s;border:none;color:white;
 }
 .orb:active{transform:scale(0.94)}
-.orb svg{width:32px;height:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
+.orb svg{width:30px;height:30px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
 .orb.listening{
   background:radial-gradient(circle at 30% 30%,#f87171,#dc2626 60%,#991b1b);
-  box-shadow:0 0 40px rgba(239,68,68,0.7),inset 0 0 20px rgba(255,255,255,0.2);
+  box-shadow:0 0 42px rgba(239,68,68,0.7),inset 0 0 20px rgba(255,255,255,0.2);
   animation:orbPulse 0.8s ease-in-out infinite;
 }
 .orb.thinking{
-  background:radial-gradient(circle at 30% 30%,#fbbf24,#d97706 60%,#92400e);
-  box-shadow:0 0 40px rgba(251,191,36,0.6),inset 0 0 20px rgba(255,255,255,0.2);
+  background:radial-gradient(circle at 30% 30%,#c084fc,#7c3aed 60%,#4c1d95);
+  box-shadow:0 0 42px rgba(192,132,252,0.7),inset 0 0 20px rgba(255,255,255,0.2);
   animation:orbPulse 1.2s ease-in-out infinite;
 }
 .orb.speaking{
   background:radial-gradient(circle at 30% 30%,#22d3ee,#0891b2 60%,#155e75);
-  box-shadow:0 0 40px rgba(6,182,212,0.6),inset 0 0 20px rgba(255,255,255,0.2);
+  box-shadow:0 0 42px rgba(6,182,212,0.65),inset 0 0 20px rgba(255,255,255,0.2);
   animation:orbPulse 0.6s ease-in-out infinite;
 }
-@keyframes orbPulse{50%{transform:scale(1.05)}}
+@keyframes orbPulse{50%{transform:scale(1.06)}}
 .waveform{
   display:flex;align-items:center;justify-content:center;gap:3px;
-  height:24px;opacity:0;transition:opacity 0.3s;
+  height:22px;opacity:0;transition:opacity 0.3s;
 }
 .waveform.active{opacity:1}
 .waveform span{
@@ -243,63 +251,66 @@ body::before{
 .waveform span:nth-child(7){animation-delay:0.2s}
 .waveform span:nth-child(8){animation-delay:0.1s}
 .waveform span:nth-child(9){animation-delay:0.05s}
-@keyframes wave{0%,100%{height:6px}50%{height:22px}}
+@keyframes wave{0%,100%{height:6px}50%{height:20px}}
 .quick-actions{
-  display:flex;gap:8px;align-items:center;font-size:11px;color:var(--muted);
+  display:flex;gap:10px;align-items:center;
+  font-size:11px;color:var(--muted);
 }
 .quick-actions button{
   background:none;border:none;color:var(--muted);
   font-size:11px;cursor:pointer;padding:6px 10px;
-  border-radius:8px;transition:all 0.2s;
+  border-radius:8px;transition:all 0.2s;font-family:inherit;
 }
 .quick-actions button:active{background:var(--surface);color:var(--text)}
+/* ── Settings Sheet ── */
 .sheet-bg{
-  position:fixed;inset:0;background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(4px);z-index:50;
+  position:fixed;inset:0;background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(6px);z-index:50;
   opacity:0;pointer-events:none;transition:opacity 0.3s;
 }
 .sheet-bg.open{opacity:1;pointer-events:auto}
 .sheet{
   position:fixed;left:0;right:0;bottom:0;z-index:51;
-  background:linear-gradient(180deg,#15102a,#0a0612);
-  border-top-left-radius:24px;border-top-right-radius:24px;
+  background:linear-gradient(180deg,#140f26,#08050f);
+  border-top-left-radius:26px;border-top-right-radius:26px;
   border-top:1px solid var(--border);
-  padding:20px 20px calc(30px + env(safe-area-inset-bottom));
+  padding:20px 22px calc(32px + env(safe-area-inset-bottom));
   transform:translateY(100%);
   transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1);
-  max-height:85vh;overflow-y:auto;max-width:560px;margin:0 auto;
+  max-height:88vh;overflow-y:auto;
+  max-width:560px;margin:0 auto;
 }
 .sheet.open{transform:translateY(0)}
 .sheet-handle{
-  width:40px;height:4px;border-radius:4px;
-  background:rgba(255,255,255,0.2);margin:0 auto 20px;
+  width:42px;height:4px;border-radius:4px;
+  background:rgba(255,255,255,0.18);margin:0 auto 24px;
 }
 .sheet h3{
-  font-size:14px;font-weight:600;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;
+  font-size:13.5px;font-weight:600;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;letter-spacing:0.2px;
 }
 .sheet h3::before{
   content:'';width:3px;height:14px;border-radius:2px;
   background:linear-gradient(180deg,#a855f7,#06b6d4);
 }
-.sheet-section{margin-bottom:24px}
-.option-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.sheet-section{margin-bottom:28px}
+.option-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .option{
-  padding:12px 14px;border-radius:12px;
+  padding:14px 15px;border-radius:14px;
   background:var(--surface);border:1px solid var(--border);
   color:var(--text);cursor:pointer;transition:all 0.2s;
   text-align:left;font-family:inherit;
 }
 .option:active{transform:scale(0.97)}
 .option.active{
-  background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(6,182,212,0.15));
-  border-color:var(--accent);box-shadow:0 0 15px rgba(168,85,247,0.2);
+  background:linear-gradient(135deg,rgba(168,85,247,0.22),rgba(6,182,212,0.15));
+  border-color:var(--accent);box-shadow:0 0 18px rgba(168,85,247,0.22);
 }
 .option .opt-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
-.option .opt-desc{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
-.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.option .opt-desc{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4}
+.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .lang-btn{
-  padding:9px 6px;border-radius:10px;
+  padding:11px 6px;border-radius:11px;
   background:var(--surface);border:1px solid var(--border);
   color:var(--text);font-size:11px;cursor:pointer;
   font-family:inherit;transition:all 0.2s;
@@ -309,22 +320,22 @@ body::before{
   border-color:var(--accent);
 }
 .save-btn{
-  width:100%;padding:14px;border-radius:14px;
+  width:100%;padding:15px;border-radius:15px;
   background:linear-gradient(135deg,#a855f7,#06b6d4);
-  border:none;color:white;font-weight:600;font-size:14px;
-  cursor:pointer;font-family:inherit;
-  box-shadow:0 4px 20px rgba(168,85,247,0.4);
+  border:none;color:white;font-weight:600;font-size:14.5px;
+  cursor:pointer;font-family:inherit;letter-spacing:0.3px;
+  box-shadow:0 6px 22px rgba(168,85,247,0.4);
 }
 .save-btn:active{transform:scale(0.98)}
-.key-hint{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4}
+.key-hint{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5}
 .key-hint a{color:var(--accent);text-decoration:none}
 .toast{
-  position:fixed;bottom:140px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:rgba(20,15,35,0.95);border:1px solid var(--border);
-  padding:10px 18px;border-radius:20px;font-size:12px;
+  position:fixed;bottom:150px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(20,15,35,0.96);border:1px solid var(--border);
+  padding:11px 20px;border-radius:22px;font-size:12.5px;
   color:var(--text);backdrop-filter:blur(10px);
   opacity:0;pointer-events:none;transition:all 0.3s;
-  z-index:100;white-space:nowrap;
+  z-index:100;white-space:nowrap;max-width:90vw;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -337,7 +348,7 @@ body::before{
       <div class="logo"><span>से</span></div>
       <div class="brand-info">
         <h1 id="brandName">Senorita</h1>
-        <p id="personaLabel">Friend Mode</p>
+        <p id="personaLabel">Assistant</p>
       </div>
     </div>
     <div class="header-actions">
@@ -356,19 +367,19 @@ body::before{
   <div class="chat" id="chat">
     <div class="welcome" id="welcome">
       <div class="welcome-orb"></div>
-      <h2 id="welcomeTitle">Hi, I'm Senorita 💜</h2>
-      <p id="welcomeText">Your personal AI assistant. Tap the mic or type below — ask anything in any language.</p>
+      <h2 id="welcomeTitle">Hi, I'm Senorita</h2>
+      <p id="welcomeText">Ask me anything — I give clear, accurate answers. Tap the mic or type below.</p>
       <div class="welcome-chips">
-        <div class="chip" data-q="Tell me a fun fact">💡 Fun fact</div>
-        <div class="chip" data-q="What's the weather like?">🌤️ Weather</div>
-        <div class="chip" data-q="Tell me a joke">😂 Joke</div>
-        <div class="chip" data-q="Motivate me for today">⚡ Motivate</div>
+        <div class="chip" data-q="What's the weather like today?">🌤 Weather</div>
+        <div class="chip" data-q="Explain quantum computing in simple words">🧠 Explain</div>
+        <div class="chip" data-q="Give me a productivity tip">⚡ Tip</div>
+        <div class="chip" data-q="What is the capital of Australia?">🌍 Fact</div>
       </div>
     </div>
   </div>
 
   <div class="text-row">
-    <input id="textInput" type="text" placeholder="Type a message..." enterkeyhint="send" autocomplete="off">
+    <input id="textInput" type="text" placeholder="Ask anything..." enterkeyhint="send" autocomplete="off">
     <button class="send-btn" id="sendBtn" aria-label="Send">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px">
         <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -409,31 +420,31 @@ body::before{
   <div class="sheet-section">
     <h3>Gemini API Key</h3>
     <input id="keyInput" type="password" placeholder="AIzaSy..."
-      style="width:100%;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;outline:none">
+      style="width:100%;padding:13px 15px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;outline:none">
     <div class="key-hint">
       Free key: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
-      Key only saved on your phone.
+      Saved only on your device.
     </div>
   </div>
 
   <div class="sheet-section">
-    <h3>AI Personality</h3>
+    <h3>Response Style</h3>
     <div class="option-grid" id="personaGrid">
-      <button class="option active" data-p="friend">
-        <div class="opt-title">🤝 Friend</div>
-        <div class="opt-desc">Casual, chill, friendly</div>
+      <button class="option active" data-p="concise">
+        <div class="opt-title">⚡ Concise</div>
+        <div class="opt-desc">Short, direct answers</div>
       </button>
-      <button class="option" data-p="teacher">
-        <div class="opt-title">🎓 Teacher</div>
-        <div class="opt-desc">Detailed explanations</div>
+      <button class="option" data-p="detailed">
+        <div class="opt-title">📖 Detailed</div>
+        <div class="opt-desc">With explanation</div>
       </button>
       <button class="option" data-p="expert">
-        <div class="opt-title">🧠 Expert</div>
-        <div class="opt-desc">Professional & precise</div>
+        <div class="opt-title">🎯 Expert</div>
+        <div class="opt-desc">Precise & technical</div>
       </button>
-      <button class="option" data-p="funny">
-        <div class="opt-title">😂 Funny</div>
-        <div class="opt-desc">Witty and entertaining</div>
+      <button class="option" data-p="friendly">
+        <div class="opt-title">💬 Friendly</div>
+        <div class="opt-desc">Warm conversation</div>
       </button>
     </div>
   </div>
@@ -457,9 +468,23 @@ body::before{
   </div>
 
   <div class="sheet-section">
+    <h3>Voice</h3>
+    <div class="option-grid" id="voiceGrid">
+      <button class="option active" data-v="auto">
+        <div class="opt-title">🔊 Auto</div>
+        <div class="opt-desc">Best natural voice</div>
+      </button>
+      <button class="option" data-v="off">
+        <div class="opt-title">🔇 Silent</div>
+        <div class="opt-desc">Text only</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="sheet-section">
     <h3>Assistant Name</h3>
     <input id="nameInput" type="text" maxlength="16" value="Senorita"
-      style="width:100%;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;outline:none">
+      style="width:100%;padding:13px 15px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;outline:none">
   </div>
 
   <button class="save-btn" id="saveBtn">Save Settings</button>
@@ -468,9 +493,10 @@ body::before{
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══ CONFIG ═══ */
-const GEMINI_MODEL = 'gemini-3.6-flash';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse&key=`;
+/* ═══════════════════════════════════════════
+   ⚙️  CONFIG
+   ═══════════════════════════════════════════ */
+const MODELS = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-2.0-flash'];
 
 function getKey() {
   return localStorage.getItem('senorita_key') || '';
@@ -478,216 +504,199 @@ function getKey() {
 
 /* ═══ UI STRINGS ═══ */
 const UI = {
-  en: {
-    ready: 'Ready', listening: 'Listening...', thinking: 'Thinking...', speaking: 'Speaking...',
-    welcomeTitle: "Hi, I'm Senorita 💜",
-    welcomeText: 'Your personal AI assistant. Tap the mic or type below — ask anything in any language.',
-    typePlaceholder: 'Type a message...',
-    noSpeech: "Didn't catch that, try again", needMic: 'Mic permission required',
-    keyNeeded: 'Add your Gemini API key first', settingsSaved: 'Settings saved ✨',
-    voiceOn: 'Voice ON', voiceOff: 'Voice OFF', chatCleared: 'Chat cleared',
-    langSet: 'Language: ', confirmClear: 'Clear chat?'
-  },
-  hi: {
-    ready: 'तैयार', listening: 'सुन रही हूँ...', thinking: 'सोच रही हूँ...', speaking: 'बोल रही हूँ...',
-    welcomeTitle: 'नमस्ते, मैं Senorita हूँ 💜',
-    welcomeText: 'आपकी personal AI assistant। माइक दबाओ या नीचे टाइप करो — किसी भी भाषा में पूछो।',
-    typePlaceholder: 'संदेश लिखो...',
-    noSpeech: 'कुछ सुना नहीं, फिर कोशिश करो', needMic: 'माइक permission चाहिए',
-    keyNeeded: 'पहले Gemini API key डालो', settingsSaved: 'Settings सेव हो गईं ✨',
-    voiceOn: 'आवाज़ ON', voiceOff: 'आवाज़ OFF', chatCleared: 'चैट साफ़ हो गई',
-    langSet: 'भाषा: ', confirmClear: 'चैट साफ़ करनी है?'
-  },
-  bn: {
-    ready: 'প্রস্তুত', listening: 'শুনছি...', thinking: 'ভাবছি...', speaking: 'বলছি...',
-    welcomeTitle: 'নমস্কার, আমি Senorita 💜',
-    welcomeText: 'তোমার personal AI। মাইক চাপো বা নিচে টাইপ করো — যেকোনো ভাষায় জিজ্ঞাসা করো।',
-    typePlaceholder: 'বার্তা লেখো...',
-    noSpeech: 'কিছু শুনিনি, আবার চেষ্টা করো', needMic: 'মাইক permission দরকার',
-    keyNeeded: 'আগে Gemini API key দাও', settingsSaved: 'Settings সেভ হয়েছে ✨',
-    voiceOn: 'ভয়েস ON', voiceOff: 'ভয়েস OFF', chatCleared: 'চ্যাট সাফ হয়েছে',
-    langSet: 'ভাষা: ', confirmClear: 'চ্যাট সাফ করবে?'
-  },
-  ta: {
-    ready: 'தயார்', listening: 'கேட்கிறேன்...', thinking: 'யோசிக்கிறேன்...', speaking: 'பேசுகிறேன்...',
-    welcomeTitle: 'வணக்கம், நான் Senorita 💜',
-    welcomeText: 'உங்கள் personal AI. மைக்கை அழுத்தவும் அல்லது கீழே தட்டச்சு செய்யவும் — எந்த மொழியிலும் கேளுங்கள்.',
-    typePlaceholder: 'செய்தி எழுதுங்கள்...',
-    noSpeech: 'எதுவும் கேட்கவில்லை, மீண்டும் முயற்சி', needMic: 'மைக் அனுமதி தேவை',
-    keyNeeded: 'முதலில் Gemini API key போடுங்கள்', settingsSaved: 'Settings சேமிக்கப்பட்டது ✨',
-    voiceOn: 'குரல் ON', voiceOff: 'குரல் OFF', chatCleared: 'அரட்டை அழிக்கப்பட்டது',
-    langSet: 'மொழி: ', confirmClear: 'அரட்டையை அழிக்கவா?'
-  },
-  te: {
-    ready: 'సిద్ధం', listening: 'వింటున్నాను...', thinking: 'ఆలోచిస్తున్నాను...', speaking: 'మాట్లాడుతున్నాను...',
-    welcomeTitle: 'నమస్కారం, నేను Senorita 💜',
-    welcomeText: 'మీ personal AI. మైక్ నొక్కండి లేదా క్రింద టైప్ చేయండి — ఏ భాషలోనైనా అడగండి.',
-    typePlaceholder: 'సందేశం టైప్ చేయండి...',
-    noSpeech: 'ఏమీ వినలేదు, మళ్ళీ ప్రయత్నించండి', needMic: 'మైక్ అనుమతి కావాలి',
-    keyNeeded: 'ముందు Gemini API key పెట్టండి', settingsSaved: 'Settings సేవ్ అయ్యాయి ✨',
-    voiceOn: 'వాయిస్ ON', voiceOff: 'వాయిస్ OFF', chatCleared: 'చాట్ క్లియర్ అయింది',
-    langSet: 'భాష: ', confirmClear: 'చాట్ క్లియర్ చేయాలా?'
-  },
-  mr: {
-    ready: 'तयार', listening: 'ऐकत आहे...', thinking: 'विचार करत आहे...', speaking: 'बोलत आहे...',
-    welcomeTitle: 'नमस्कार, मी Senorita 💜',
-    welcomeText: 'तुमची personal AI. माइक दाबा किंवा खाली टाइप करा — कोणत्याही भाषेत विचारा.',
-    typePlaceholder: 'संदेश लिहा...',
-    noSpeech: 'काही ऐकले नाही, पुन्हा प्रयत्न करा', needMic: 'माइक permission हवी',
-    keyNeeded: 'आधी Gemini API key टाका', settingsSaved: 'Settings सेव्ह झाल्या ✨',
-    voiceOn: 'आवाज ON', voiceOff: 'आवाज OFF', chatCleared: 'चॅट साफ झाली',
-    langSet: 'भाषा: ', confirmClear: 'चॅट साफ करायची?'
-  },
-  gu: {
-    ready: 'તૈયાર', listening: 'સાંભળી રહી છું...', thinking: 'વિચારી રહી છું...', speaking: 'બોલી રહી છું...',
-    welcomeTitle: 'નમસ્તે, હું Senorita છું 💜',
-    welcomeText: 'તમારી personal AI. માઇક દબાવો અથવા નીચે ટાઇપ કરો — કોઈપણ ભાષામાં પૂછો.',
-    typePlaceholder: 'સંદેશ લખો...',
-    noSpeech: 'કંઈ સાંભળ્યું નહીં, ફરી પ્રયાસ કરો', needMic: 'માઇક permission જોઈએ',
-    keyNeeded: 'પહેલા Gemini API key નાખો', settingsSaved: 'Settings સેવ થઈ ✨',
-    voiceOn: 'અવાજ ON', voiceOff: 'અવાજ OFF', chatCleared: 'ચેટ સાફ થઈ',
-    langSet: 'ભાષા: ', confirmClear: 'ચેટ સાફ કરવી?'
-  },
-  kn: {
-    ready: 'ಸಿದ್ಧ', listening: 'ಕೇಳುತ್ತಿದ್ದೇನೆ...', thinking: 'ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...', speaking: 'ಮಾತನಾಡುತ್ತಿದ್ದೇನೆ...',
-    welcomeTitle: 'ನಮಸ್ಕಾರ, ನಾನು Senorita 💜',
-    welcomeText: 'ನಿಮ್ಮ personal AI. ಮೈಕ್ ಒತ್ತಿರಿ ಅಥವಾ ಕೆಳಗೆ ಟೈಪ್ ಮಾಡಿ — ಯಾವುದೇ ಭಾಷೆಯಲ್ಲಿ ಕೇಳಿ.',
-    typePlaceholder: 'ಸಂದೇಶ ಟೈಪ್ ಮಾಡಿ...',
-    noSpeech: 'ಏನೂ ಕೇಳಲಿಲ್ಲ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ', needMic: 'ಮೈಕ್ permission ಬೇಕು',
-    keyNeeded: 'ಮೊದಲು Gemini API key ಹಾಕಿ', settingsSaved: 'Settings ಉಳಿಸಲಾಗಿದೆ ✨',
-    voiceOn: 'ಧ್ವನಿ ON', voiceOff: 'ಧ್ವನಿ OFF', chatCleared: 'ಚಾಟ್ ತೆರವುಗೊಂಡಿದೆ',
-    langSet: 'ಭಾಷೆ: ', confirmClear: 'ಚಾಟ್ ತೆರವು ಮಾಡುವುದೇ?'
-  },
-  ml: {
-    ready: 'തയ്യാർ', listening: 'കേൾക്കുന്നു...', thinking: 'ചിന്തിക്കുന്നു...', speaking: 'സംസാരിക്കുന്നു...',
-    welcomeTitle: 'നമസ്കാരം, ഞാൻ Senorita 💜',
-    welcomeText: 'നിങ്ങളുടെ personal AI. മൈക്ക് അമർത്തുക അല്ലെങ്കിൽ താഴെ ടൈപ്പ് ചെയ്യുക — ഏത് ഭാഷയിലും ചോദിക്കുക.',
-    typePlaceholder: 'സന്ദേശം ടൈപ്പ് ചെയ്യുക...',
-    noSpeech: 'ഒന്നും കേട്ടില്ല, വീണ്ടും ശ്രമിക്കുക', needMic: 'മൈക്ക് permission വേണം',
-    keyNeeded: 'ആദ്യം Gemini API key ഇടുക', settingsSaved: 'Settings സേവ് ചെയ്തു ✨',
-    voiceOn: 'ശബ്ദം ON', voiceOff: 'ശബ്ദം OFF', chatCleared: 'ചാറ്റ് മായ്ച്ചു',
-    langSet: 'ഭാഷ: ', confirmClear: 'ചാറ്റ് മായ്ക്കണോ?'
-  },
-  pa: {
-    ready: 'ਤਿਆਰ', listening: 'ਸੁਣ ਰਹੀ ਹਾਂ...', thinking: 'ਸੋਚ ਰਹੀ ਹਾਂ...', speaking: 'ਬੋਲ ਰਹੀ ਹਾਂ...',
-    welcomeTitle: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਮੈਂ Senorita ਹਾਂ 💜',
-    welcomeText: 'ਤੁਹਾਡੀ personal AI। ਮਾਈਕ ਦਬਾਓ ਜਾਂ ਹੇਠਾਂ ਟਾਈਪ ਕਰੋ — ਕਿਸੇ ਵੀ ਭਾਸ਼ਾ ਵਿੱਚ ਪੁੱਛੋ।',
-    typePlaceholder: 'ਸੁਨੇਹਾ ਲਿਖੋ...',
-    noSpeech: 'ਕੁਝ ਸੁਣਿਆ ਨਹੀਂ, ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ', needMic: 'ਮਾਈਕ permission ਚਾਹੀਦੀ ਹੈ',
-    keyNeeded: 'ਪਹਿਲਾਂ Gemini API key ਪਾਓ', settingsSaved: 'Settings ਸੇਵ ਹੋ ਗਈਆਂ ✨',
-    voiceOn: 'ਆਵਾਜ਼ ON', voiceOff: 'ਆਵਾਜ਼ OFF', chatCleared: 'ਚੈਟ ਸਾਫ਼ ਹੋ ਗਈ',
-    langSet: 'ਭਾਸ਼ਾ: ', confirmClear: 'ਚੈਟ ਸਾਫ਼ ਕਰਨੀ ਹੈ?'
-  },
-  ur: {
-    ready: 'تیار', listening: 'سن رہی ہوں...', thinking: 'سوچ رہی ہوں...', speaking: 'بول رہی ہوں...',
-    welcomeTitle: 'السلام علیکم، میں Senorita ہوں 💜',
-    welcomeText: 'آپ کی personal AI۔ مائیک دبائیں یا نیچے ٹائپ کریں — کسی بھی زبان میں پوچھیں۔',
-    typePlaceholder: 'پیغام لکھیں...',
-    noSpeech: 'کچھ سنا نہیں، دوبارہ کوشش کریں', needMic: 'مائیک permission چاہیے',
-    keyNeeded: 'پہلے Gemini API key ڈالیں', settingsSaved: 'Settings محفوظ ہو گئیں ✨',
-    voiceOn: 'آواز ON', voiceOff: 'آواز OFF', chatCleared: 'چیٹ صاف ہو گئی',
-    langSet: 'زبان: ', confirmClear: 'چیٹ صاف کریں؟'
-  }
+  en:{ready:'Ready',listening:'Listening...',thinking:'Thinking...',speaking:'Speaking...',
+    welcomeTitle:"Hi, I'm Senorita",welcomeText:'Ask me anything — I give clear, accurate answers. Tap the mic or type below.',
+    typePlaceholder:'Ask anything...',noSpeech:"Didn't catch that, try again",needMic:'Mic permission required',
+    keyNeeded:'Add your Gemini API key first',settingsSaved:'Settings saved',
+    voiceOn:'Voice ON',voiceOff:'Voice OFF',chatCleared:'Chat cleared',
+    langSet:'Language: ',confirmClear:'Clear chat?',busy:'Server busy, retrying...'},
+  hi:{ready:'तैयार',listening:'सुन रही हूँ...',thinking:'सोच रही हूँ...',speaking:'बोल रही हूँ...',
+    welcomeTitle:'नमस्ते, मैं Senorita हूँ',welcomeText:'कुछ भी पूछो — साफ़ और सटीक जवाब मिलेगा। माइक दबाओ या नीचे टाइप करो।',
+    typePlaceholder:'कुछ भी पूछो...',noSpeech:'कुछ सुना नहीं, फिर कोशिश करो',needMic:'माइक permission चाहिए',
+    keyNeeded:'पहले Gemini API key डालो',settingsSaved:'Settings सेव हो गईं',
+    voiceOn:'आवाज़ ON',voiceOff:'आवाज़ OFF',chatCleared:'चैट साफ़ हो गई',
+    langSet:'भाषा: ',confirmClear:'चैट साफ़ करनी है?',busy:'सर्वर व्यस्त है, फिर कोशिश...'},
+  bn:{ready:'প্রস্তুত',listening:'শুনছি...',thinking:'ভাবছি...',speaking:'বলছি...',
+    welcomeTitle:'নমস্কার, আমি Senorita',welcomeText:'যেকোনো কিছু জিজ্ঞাসা করো — স্পষ্ট ও সঠিক উত্তর পাবে।',
+    typePlaceholder:'কিছু জিজ্ঞাসা করো...',noSpeech:'কিছু শুনিনি, আবার চেষ্টা করো',needMic:'মাইক permission দরকার',
+    keyNeeded:'আগে Gemini API key দাও',settingsSaved:'Settings সেভ হয়েছে',
+    voiceOn:'ভয়েস ON',voiceOff:'ভয়েস OFF',chatCleared:'চ্যাট সাফ হয়েছে',
+    langSet:'ভাষা: ',confirmClear:'চ্যাট সাফ করবে?',busy:'সার্ভার ব্যস্ত, আবার চেষ্টা...'},
+  ta:{ready:'தயார்',listening:'கேட்கிறேன்...',thinking:'யோசிக்கிறேன்...',speaking:'பேசுகிறேன்...',
+    welcomeTitle:'வணக்கம், நான் Senorita',welcomeText:'எதையும் கேளுங்கள் — தெளிவான, துல்லியமான பதில்.',
+    typePlaceholder:'எதையும் கேளுங்கள்...',noSpeech:'எதுவும் கேட்கவில்லை, மீண்டும் முயற்சி',needMic:'மைக் அனுமதி தேவை',
+    keyNeeded:'முதலில் Gemini API key போடுங்கள்',settingsSaved:'Settings சேமிக்கப்பட்டது',
+    voiceOn:'குரல் ON',voiceOff:'குரல் OFF',chatCleared:'அரட்டை அழிக்கப்பட்டது',
+    langSet:'மொழி: ',confirmClear:'அரட்டையை அழிக்கவா?',busy:'சர்வர் பிஸி, மீண்டும்...'},
+  te:{ready:'సిద్ధం',listening:'వింటున్నాను...',thinking:'ఆలోచిస్తున్నాను...',speaking:'మాట్లాడుతున్నాను...',
+    welcomeTitle:'నమస్కారం, నేను Senorita',welcomeText:'ఏదైనా అడగండి — స్పష్టమైన, కచ్చితమైన సమాధానం.',
+    typePlaceholder:'ఏదైనా అడగండి...',noSpeech:'ఏమీ వినలేదు, మళ్ళీ ప్రయత్నించండి',needMic:'మైక్ అనుమతి కావాలి',
+    keyNeeded:'ముందు Gemini API key పెట్టండి',settingsSaved:'Settings సేవ్ అయ్యాయి',
+    voiceOn:'వాయిస్ ON',voiceOff:'వాయిస్ OFF',chatCleared:'చాట్ క్లియర్',
+    langSet:'భాష: ',confirmClear:'చాట్ క్లియర్ చేయాలా?',busy:'సర్వర్ బిజీ, మళ్ళీ...'},
+  mr:{ready:'तयार',listening:'ऐकत आहे...',thinking:'विचार करत आहे...',speaking:'बोलत आहे...',
+    welcomeTitle:'नमस्कार, मी Senorita',welcomeText:'काहीही विचारा — स्पष्ट आणि अचूक उत्तर.',
+    typePlaceholder:'काहीही विचारा...',noSpeech:'काही ऐकले नाही, पुन्हा प्रयत्न करा',needMic:'माइक permission हवी',
+    keyNeeded:'आधी Gemini API key टाका',settingsSaved:'Settings सेव्ह झाल्या',
+    voiceOn:'आवाज ON',voiceOff:'आवाज OFF',chatCleared:'चॅट साफ झाली',
+    langSet:'भाषा: ',confirmClear:'चॅट साफ करायची?',busy:'सर्व्हर व्यस्त, पुन्हा...'},
+  gu:{ready:'તૈયાર',listening:'સાંભળી રહી છું...',thinking:'વિચારી રહી છું...',speaking:'બોલી રહી છું...',
+    welcomeTitle:'નમસ્તે, હું Senorita છું',welcomeText:'કંઈ પણ પૂછો — સ્પષ્ટ અને સચોટ જવાબ.',
+    typePlaceholder:'કંઈ પણ પૂછો...',noSpeech:'કંઈ સાંભળ્યું નહીં, ફરી પ્રયાસ કરો',needMic:'માઇક permission જોઈએ',
+    keyNeeded:'પહેલા Gemini API key નાખો',settingsSaved:'Settings સેવ થઈ',
+    voiceOn:'અવાજ ON',voiceOff:'અવાજ OFF',chatCleared:'ચેટ સાફ થઈ',
+    langSet:'ભાષા: ',confirmClear:'ચેટ સાફ કરવી?',busy:'સર્વર વ્યસ્ત, ફરી...'},
+  kn:{ready:'ಸಿದ್ಧ',listening:'ಕೇಳುತ್ತಿದ್ದೇನೆ...',thinking:'ಯೋಚಿಸುತ್ತಿದ್ದೇನೆ...',speaking:'ಮಾತನಾಡುತ್ತಿದ್ದೇನೆ...',
+    welcomeTitle:'ನಮಸ್ಕಾರ, ನಾನು Senorita',welcomeText:'ಏನನ್ನಾದರೂ ಕೇಳಿ — ಸ್ಪಷ್ಟ ಮತ್ತು ನಿಖರ ಉತ್ತರ.',
+    typePlaceholder:'ಏನನ್ನಾದರೂ ಕೇಳಿ...',noSpeech:'ಏನೂ ಕೇಳಲಿಲ್ಲ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ',needMic:'ಮೈಕ್ permission ಬೇಕು',
+    keyNeeded:'ಮೊದಲು Gemini API key ಹಾಕಿ',settingsSaved:'Settings ಉಳಿಸಲಾಗಿದೆ',
+    voiceOn:'ಧ್ವನಿ ON',voiceOff:'ಧ್ವನಿ OFF',chatCleared:'ಚಾಟ್ ತೆರವು',
+    langSet:'ಭಾಷೆ: ',confirmClear:'ಚಾಟ್ ತೆರವು ಮಾಡುವುದೇ?',busy:'ಸರ್ವರ್ ಬಿಜಿ, ಮತ್ತೆ...'},
+  ml:{ready:'തയ്യാർ',listening:'കേൾക്കുന്നു...',thinking:'ചിന്തിക്കുന്നു...',speaking:'സംസാരിക്കുന്നു...',
+    welcomeTitle:'നമസ്കാരം, ഞാൻ Senorita',welcomeText:'എന്തും ചോദിക്കൂ — വ്യക്തവും കൃത്യവുമായ ഉത്തരം.',
+    typePlaceholder:'എന്തും ചോദിക്കൂ...',noSpeech:'ഒന്നും കേട്ടില്ല, വീണ്ടും ശ്രമിക്കുക',needMic:'മൈക്ക് permission വേണം',
+    keyNeeded:'ആദ്യം Gemini API key ഇടുക',settingsSaved:'Settings സേവ്',
+    voiceOn:'ശബ്ദം ON',voiceOff:'ശബ്ദം OFF',chatCleared:'ചാറ്റ് മായ്ച്ചു',
+    langSet:'ഭാഷ: ',confirmClear:'ചാറ്റ് മായ്ക്കണോ?',busy:'സർവർ ബിസി, വീണ്ടും...'},
+  pa:{ready:'ਤਿਆਰ',listening:'ਸੁਣ ਰਹੀ ਹਾਂ...',thinking:'ਸੋਚ ਰਹੀ ਹਾਂ...',speaking:'ਬੋਲ ਰਹੀ ਹਾਂ...',
+    welcomeTitle:'ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਮੈਂ Senorita ਹਾਂ',welcomeText:'ਕੁਝ ਵੀ ਪੁੱਛੋ — ਸਾਫ਼ ਅਤੇ ਸਹੀ ਜਵਾਬ।',
+    typePlaceholder:'ਕੁਝ ਵੀ ਪੁੱਛੋ...',noSpeech:'ਕੁਝ ਸੁਣਿਆ ਨਹੀਂ, ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ',needMic:'ਮਾਈਕ permission ਚਾਹੀਦੀ',
+    keyNeeded:'ਪਹਿਲਾਂ Gemini API key ਪਾਓ',settingsSaved:'Settings ਸੇਵ ਹੋ ਗਈਆਂ',
+    voiceOn:'ਆਵਾਜ਼ ON',voiceOff:'ਆਵਾਜ਼ OFF',chatCleared:'ਚੈਟ ਸਾਫ਼',
+    langSet:'ਭਾਸ਼ਾ: ',confirmClear:'ਚੈਟ ਸਾਫ਼ ਕਰਨੀ ਹੈ?',busy:'ਸਰਵਰ ਬਿਜ਼ੀ, ਦੁਬਾਰਾ...'},
+  ur:{ready:'تیار',listening:'سن رہی ہوں...',thinking:'سوچ رہی ہوں...',speaking:'بول رہی ہوں...',
+    welcomeTitle:'السلام علیکم، میں Senorita ہوں',welcomeText:'کچھ بھی پوچھیں — واضح اور درست جواب۔',
+    typePlaceholder:'کچھ بھی پوچھیں...',noSpeech:'کچھ سنا نہیں، دوبارہ کوشش',needMic:'مائیک permission چاہیے',
+    keyNeeded:'پہلے Gemini API key ڈالیں',settingsSaved:'Settings محفوظ',
+    voiceOn:'آواز ON',voiceOff:'آواز OFF',chatCleared:'چیٹ صاف',
+    langSet:'زبان: ',confirmClear:'چیٹ صاف کریں؟',busy:'سرور مصروف، دوبارہ...'}
 };
 
-function t(key) {
+function t(key){
   const code = state.lang === 'auto' ? 'en' : state.lang.split('-')[0];
   return (UI[code] && UI[code][key]) || UI.en[key];
 }
 
-/* ═══ PERSONAS ═══ */
+/* ═══ PERSONAS — refined, no fluff ═══ */
 const PERSONAS = {
-  friend: { label: 'Friend Mode', prompt: `You are Senorita, a friendly, warm AI companion for an Indian user. Talk casually like a close friend — mix Hindi and English naturally (Hinglish). Be supportive, use emojis occasionally, keep replies short (2-4 lines usually). Reply in whatever language the user speaks.` },
-  teacher: { label: 'Teacher Mode', prompt: `You are Senorita, a patient and brilliant teacher. Explain concepts clearly with examples and step-by-step breakdowns. Structure your answer. Use the user's language. Be thorough but not boring.` },
-  expert: { label: 'Expert Mode', prompt: `You are Senorita, a highly knowledgeable expert assistant. Give precise, professional, well-researched answers. No fluff. Reply in the user's language.` },
-  funny: { label: 'Funny Mode', prompt: `You are Senorita, a witty, humorous AI. Crack jokes, use light sarcasm, puns — but still answer correctly. Reply in the user's language, culturally relevant to India. Keep it punchy.` }
+  concise: { label:'Concise', prompt: `You are Senorita, a highly accurate AI assistant.
+
+CRITICAL RULES:
+- Answer the question DIRECTLY in the first sentence.
+- Keep answers SHORT: 1-3 sentences max unless user explicitly asks for detail.
+- NO filler, NO lectures, NO "Great question!" or "That's interesting" openings.
+- NO unnecessary disclaimers or generic advice.
+- If you don't know something, say "I don't know" or "I'm not sure" — never make up facts.
+- Use exact facts, names, dates, numbers when relevant.
+- Match the user's language and tone.` },
+  detailed: { label:'Detailed', prompt: `You are Senorita, a knowledgeable AI assistant.
+
+- Start with a direct 1-line answer.
+- Then add explanation with concrete examples if helpful.
+- Use structured formatting (numbered lists, bullets) when it improves clarity.
+- No filler, no generic lectures. Be specific and factual.
+- Match the user's language.` },
+  expert: { label:'Expert', prompt: `You are Senorita, a precise, technical AI expert.
+
+- Give accurate, factual, well-researched answers.
+- Use correct terminology. No simplification unless asked.
+- Direct answer first, then supporting detail.
+- No fluff, no filler, no lecture. If uncertain, say so.
+- Match the user's language.` },
+  friendly: { label:'Friendly', prompt: `You are Senorita, a warm and helpful AI companion.
+
+- Be warm and natural, but still ACCURATE and CONCISE.
+- Answer directly. Don't lecture or give unsolicited advice.
+- Keep answers to 2-4 sentences unless asked for more.
+- Warmth ≠ verbosity. No filler phrases.
+- Match the user's language.` }
 };
 
 const LANGS = {
-  'auto':  {stt:'hi-IN', tts:'hi-IN', name:'Auto'},
-  'hi-IN': {stt:'hi-IN', tts:'hi-IN', name:'हिन्दी'},
-  'en-IN': {stt:'en-IN', tts:'en-IN', name:'English'},
-  'bn-IN': {stt:'bn-IN', tts:'bn-IN', name:'বাংলা'},
-  'ta-IN': {stt:'ta-IN', tts:'ta-IN', name:'தமிழ்'},
-  'te-IN': {stt:'te-IN', tts:'te-IN', name:'తెలుగు'},
-  'mr-IN': {stt:'mr-IN', tts:'mr-IN', name:'मराठी'},
-  'gu-IN': {stt:'gu-IN', tts:'gu-IN', name:'ગુજરાતી'},
-  'kn-IN': {stt:'kn-IN', tts:'kn-IN', name:'ಕನ್ನಡ'},
-  'ml-IN': {stt:'ml-IN', tts:'ml-IN', name:'മലയാളം'},
-  'pa-IN': {stt:'pa-IN', tts:'pa-IN', name:'ਪੰਜਾਬੀ'},
-  'ur-IN': {stt:'ur-IN', tts:'ur-IN', name:'اردو'}
+  'auto':{stt:'hi-IN',tts:'hi-IN',name:'Auto'},
+  'hi-IN':{stt:'hi-IN',tts:'hi-IN',name:'हिन्दी'},
+  'en-IN':{stt:'en-IN',tts:'en-IN',name:'English'},
+  'bn-IN':{stt:'bn-IN',tts:'bn-IN',name:'বাংলা'},
+  'ta-IN':{stt:'ta-IN',tts:'ta-IN',name:'தமிழ்'},
+  'te-IN':{stt:'te-IN',tts:'te-IN',name:'తెలుగు'},
+  'mr-IN':{stt:'mr-IN',tts:'mr-IN',name:'मराठी'},
+  'gu-IN':{stt:'gu-IN',tts:'gu-IN',name:'ગુજરાતી'},
+  'kn-IN':{stt:'kn-IN',tts:'kn-IN',name:'ಕನ್ನಡ'},
+  'ml-IN':{stt:'ml-IN',tts:'ml-IN',name:'മലയാളം'},
+  'pa-IN':{stt:'pa-IN',tts:'pa-IN',name:'ਪੰਜਾਬੀ'},
+  'ur-IN':{stt:'ur-IN',tts:'ur-IN',name:'اردو'}
 };
 
 let state = {
-  persona: localStorage.getItem('senorita_persona') || 'friend',
+  persona: localStorage.getItem('senorita_persona') || 'concise',
   lang:    localStorage.getItem('senorita_lang') || 'auto',
   name:    localStorage.getItem('senorita_name') || 'Senorita',
-  muted:   localStorage.getItem('senorita_muted') === 'true',
+  voice:   localStorage.getItem('senorita_voice') || 'auto',
   history: []
 };
 
 const $ = id => document.getElementById(id);
-const chat = $('chat'), orb = $('orb'), statusChip = $('statusChip');
-const statusText = $('statusText'), waveform = $('waveform');
-const welcome = $('welcome'), toast = $('toast');
-const sheet = $('sheet'), sheetBg = $('sheetBg');
-const nameInput = $('nameInput'), keyInput = $('keyInput');
-const textInput = $('textInput'), sendBtn = $('sendBtn');
+const chat=$('chat'),orb=$('orb'),statusChip=$('statusChip');
+const statusText=$('statusText'),waveform=$('waveform');
+const welcome=$('welcome'),toast=$('toast');
+const sheet=$('sheet'),sheetBg=$('sheetBg');
+const nameInput=$('nameInput'),keyInput=$('keyInput');
+const textInput=$('textInput'),sendBtn=$('sendBtn');
 
-function init() {
+function init(){
   $('brandName').textContent = state.name;
   $('personaLabel').textContent = PERSONAS[state.persona].label;
   nameInput.value = state.name;
   keyInput.value = getKey();
   document.title = state.name + ' · AI Assistant';
 
-  document.querySelectorAll('#personaGrid .option').forEach(o => {
+  document.querySelectorAll('#personaGrid .option').forEach(o=>{
     o.classList.toggle('active', o.dataset.p === state.persona);
   });
-  document.querySelectorAll('#langGrid .lang-btn').forEach(o => {
+  document.querySelectorAll('#langGrid .lang-btn').forEach(o=>{
     o.classList.toggle('active', o.dataset.l === state.lang);
   });
+  document.querySelectorAll('#voiceGrid .option').forEach(o=>{
+    o.classList.toggle('active', o.dataset.v === state.voice);
+  });
 
-  $('muteBtn').textContent = state.muted ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
+  $('muteBtn').textContent = state.voice === 'off' ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
   $('langQuickBtn').textContent = '🌐 ' + LANGS[state.lang].name;
   statusText.textContent = t('ready');
   textInput.placeholder = t('typePlaceholder');
 
-  const wt = $('welcomeTitle'), wp = $('welcomeText');
-  if (wt) wt.textContent = t('welcomeTitle');
-  if (wp) wp.textContent = t('welcomeText');
+  const wt=$('welcomeTitle'), wp=$('welcomeText');
+  if(wt) wt.textContent = t('welcomeTitle');
+  if(wp) wp.textContent = t('welcomeText');
 
-  if (!getKey()) {
-    setTimeout(() => {
-      sheet.classList.add('open');
-      sheetBg.classList.add('open');
+  if(!getKey()){
+    setTimeout(()=>{
+      sheet.classList.add('open'); sheetBg.classList.add('open');
       showToast(t('keyNeeded'));
     }, 800);
   }
 }
 
-function setStatus(mode='') {
-  const map = { '': 'ready', listening: 'listening', thinking: 'thinking', speaking: 'speaking' };
-  statusText.textContent = t(map[mode] || 'ready');
+function setStatus(mode=''){
+  const map={'':'ready',listening:'listening',thinking:'thinking',speaking:'speaking'};
+  statusText.textContent = t(map[mode]||'ready');
   statusChip.className = 'status-chip ' + mode;
   orb.className = 'orb ' + mode;
-  if (mode === 'listening') waveform.classList.add('active');
+  if(mode==='listening') waveform.classList.add('active');
   else waveform.classList.remove('active');
 }
 
-function showToast(msg) {
+function showToast(msg){
   toast.textContent = msg;
   toast.classList.add('show');
   clearTimeout(toast._t);
-  toast._t = setTimeout(() => toast.classList.remove('show'), 2500);
+  toast._t = setTimeout(()=>toast.classList.remove('show'), 2500);
 }
 
-function scrollBottom() {
-  requestAnimationFrame(() => chat.scrollTop = chat.scrollHeight);
-}
+function scrollBottom(){ requestAnimationFrame(()=>chat.scrollTop = chat.scrollHeight); }
 
-function addMsg(role, text) {
-  if (welcome.parentNode) welcome.remove();
+function addMsg(role, text){
+  if(welcome.parentNode) welcome.remove();
   const el = document.createElement('div');
   el.className = 'msg ' + role;
   el.textContent = text;
@@ -696,91 +705,87 @@ function addMsg(role, text) {
   return el;
 }
 
+/* ═══ STT ═══ */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let recog = null, isListening = false, finalText = '', interimEl = null;
+let recog=null, isListening=false, finalText='', interimEl=null;
 
-if (SR) {
+if(SR){
   recog = new SR();
   recog.continuous = false;
   recog.interimResults = true;
   recog.maxAlternatives = 1;
 
-  recog.onstart = () => {
-    isListening = true;
-    finalText = '';
+  recog.onstart = ()=>{
+    isListening = true; finalText = '';
     setStatus('listening');
     interimEl = document.createElement('div');
     interimEl.className = 'msg interim';
     interimEl.textContent = '...';
-    if (welcome.parentNode) welcome.remove();
+    if(welcome.parentNode) welcome.remove();
     chat.appendChild(interimEl);
     scrollBottom();
-    if (navigator.vibrate) navigator.vibrate(20);
+    if(navigator.vibrate) navigator.vibrate(20);
   };
 
-  recog.onresult = (e) => {
+  recog.onresult = (e)=>{
     let interim = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
+    for(let i=e.resultIndex; i<e.results.length; i++){
       const tx = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalText += tx;
+      if(e.results[i].isFinal) finalText += tx;
       else interim += tx;
     }
-    if (interimEl) {
+    if(interimEl){
       interimEl.textContent = (finalText + interim) || '...';
       scrollBottom();
     }
   };
 
-  recog.onerror = (e) => {
-    console.warn('STT:', e.error);
-    if (e.error === 'no-speech') showToast(t('noSpeech'));
-    else if (e.error === 'not-allowed') showToast(t('needMic'));
-    else if (e.error === 'aborted') {}
+  recog.onerror = (e)=>{
+    if(e.error==='no-speech') showToast(t('noSpeech'));
+    else if(e.error==='not-allowed') showToast(t('needMic'));
+    else if(e.error==='aborted'){}
     else showToast('Error: ' + e.error);
     cleanup();
   };
 
-  recog.onend = () => {
+  recog.onend = ()=>{
     cleanup();
     const text = finalText.trim();
-    if (text) {
-      if (interimEl) { interimEl.remove(); interimEl = null; }
+    if(text){
+      if(interimEl){ interimEl.remove(); interimEl=null; }
       addMsg('user', text);
       askAI(text);
     } else {
-      if (interimEl) interimEl.remove();
+      if(interimEl) interimEl.remove();
       setStatus();
     }
   };
 }
 
-function cleanup() {
+function cleanup(){
   isListening = false;
-  if (orb.className.includes('listening')) setStatus();
+  if(orb.className.includes('listening')) setStatus();
 }
 
-function startListening() {
-  if (!recog) { showToast('Speech recognition not supported'); return; }
-  if (!getKey()) {
+function startListening(){
+  if(!recog){ showToast('Speech not supported'); return; }
+  if(!getKey()){
     showToast(t('keyNeeded'));
-    sheet.classList.add('open');
-    sheetBg.classList.add('open');
+    sheet.classList.add('open'); sheetBg.classList.add('open');
     return;
   }
-  if (isListening) { recog.stop(); return; }
-  const cfg = LANGS[state.lang];
-  recog.lang = cfg.stt;
-  try { recog.start(); }
-  catch (e) { console.warn(e); }
+  if(isListening){ recog.stop(); return; }
+  recog.lang = LANGS[state.lang].stt;
+  try{ recog.start(); } catch(e){ console.warn(e); }
 }
 
-function sendText() {
+/* ═══ TEXT INPUT ═══ */
+function sendText(){
   const text = textInput.value.trim();
-  if (!text) return;
-  if (!getKey()) {
+  if(!text) return;
+  if(!getKey()){
     showToast(t('keyNeeded'));
-    sheet.classList.add('open');
-    sheetBg.classList.add('open');
+    sheet.classList.add('open'); sheetBg.classList.add('open');
     return;
   }
   textInput.value = '';
@@ -788,188 +793,282 @@ function sendText() {
   askAI(text);
   textInput.focus();
 }
-
 sendBtn.onclick = sendText;
-textInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter') { e.preventDefault(); sendText(); }
+textInput.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){ e.preventDefault(); sendText(); }
 });
 
-async function askAI(prompt) {
+/* ═══ GEMINI CALL with retry + fallback ═══ */
+async function askAI(prompt){
   const GEMINI_KEY = getKey();
-  if (!GEMINI_KEY) {
+  if(!GEMINI_KEY){
     addMsg('ai', '⚠️ ' + t('keyNeeded'));
     setStatus();
-    sheet.classList.add('open');
-    sheetBg.classList.add('open');
     return;
   }
 
   setStatus('thinking');
 
-  let langInstruction = '';
-  if (state.lang === 'auto') {
-    langInstruction = 'IMPORTANT: Detect the language of the user\'s message and reply in that SAME language. If they mix languages, mix back naturally.';
-  } else {
-    langInstruction = `IMPORTANT: Reply ONLY in ${LANGS[state.lang].name}.`;
-  }
+  let langInstr = state.lang === 'auto'
+    ? 'Detect the user\'s language and reply in the SAME language. If they mix, mix naturally.'
+    : `Reply ONLY in ${LANGS[state.lang].name}.`;
 
-  const systemPrompt = PERSONAS[state.persona].prompt + '\n\n' + langInstruction +
-    '\n\nKeep responses concise and screen-friendly. Use line breaks for readability.';
+  const systemPrompt = PERSONAS[state.persona].prompt + '\n\n' + langInstr;
 
-  state.history.push({ role: 'user', parts: [{ text: prompt }] });
+  state.history.push({ role:'user', parts:[{text:prompt}] });
+  // Trim old history
+  if(state.history.length > 20) state.history = state.history.slice(-20);
 
   const body = {
-    systemInstruction: { parts: [{ text: systemPrompt }] },
+    systemInstruction:{ parts:[{text:systemPrompt}] },
     contents: state.history,
-    generationConfig: { temperature: 0.85, maxOutputTokens: 800, topP: 0.95 }
+    generationConfig:{ temperature: 0.7, maxOutputTokens: 700, topP: 0.9 }
   };
 
   const aiEl = addMsg('ai', '');
   aiEl.innerHTML = '<span class="cursor"></span>';
   let fullText = '';
+  let lastErr = null;
 
-  try {
-    const res = await fetch(GEMINI_URL + GEMINI_KEY, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+  // Try each model
+  for(const model of MODELS){
+    try{
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${GEMINI_KEY}`;
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(body)
+      });
 
-    if (!res.ok) {
-      const errTxt = await res.text();
-      throw new Error('API ' + res.status + ': ' + errTxt.slice(0, 200));
-    }
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop();
-
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const js = line.slice(6).trim();
-        if (!js || js === '[DONE]') continue;
-        try {
-          const parsed = JSON.parse(js);
-          const parts = parsed.candidates?.[0]?.content?.parts;
-          if (parts) for (const p of parts) if (p.text) fullText += p.text;
-        } catch (_) {}
+      if(!res.ok){
+        const errTxt = await res.text();
+        // 503 / 429 → try next model
+        if(res.status === 503 || res.status === 429){
+          lastErr = new Error('Model busy');
+          continue;
+        }
+        throw new Error('API ' + res.status + ': ' + errTxt.slice(0, 180));
       }
-      aiEl.innerHTML = escapeHtml(fullText) + '<span class="cursor"></span>';
-      scrollBottom();
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      fullText = '';
+
+      while(true){
+        const { done, value } = await reader.read();
+        if(done) break;
+        buffer += decoder.decode(value, {stream:true});
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for(const line of lines){
+          if(!line.startsWith('data: ')) continue;
+          const js = line.slice(6).trim();
+          if(!js || js === '[DONE]') continue;
+          try{
+            const parsed = JSON.parse(js);
+            const parts = parsed.candidates?.[0]?.content?.parts;
+            if(parts) for(const p of parts) if(p.text) fullText += p.text;
+          }catch(_){}
+        }
+        aiEl.innerHTML = escapeHtml(fullText) + '<span class="cursor"></span>';
+        scrollBottom();
+      }
+
+      // Success
+      aiEl.textContent = fullText;
+      state.history.push({ role:'model', parts:[{text:fullText}] });
+      setStatus();
+      speak(fullText);
+      return;
+
+    } catch(err){
+      lastErr = err;
+      // If network / other, try next model too
+      continue;
     }
-
-    aiEl.textContent = fullText;
-    state.history.push({ role: 'model', parts: [{ text: fullText }] });
-    if (state.history.length > 24) state.history = state.history.slice(-24);
-
-    setStatus();
-    speak(fullText);
-
-  } catch (err) {
-    console.error(err);
-    aiEl.textContent = '⚠️ ' + err.message;
-    setStatus();
   }
+
+  // All models failed
+  aiEl.textContent = '⚠️ ' + (lastErr?.message || 'Something went wrong. Please try again.');
+  setStatus();
 }
 
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
-function speak(text) {
-  if (state.muted || !('speechSynthesis' in window)) return;
+/* ═══ VOICE — smarter selection ═══ */
+let cachedVoices = [];
+
+function loadVoices(){
+  cachedVoices = speechSynthesis.getVoices() || [];
+}
+
+function pickBestVoice(lang){
+  if(!cachedVoices.length) loadVoices();
+  const base = lang.split('-')[0];
+
+  // Priority keywords — female Indian voices
+  const femaleHints = ['neerja','swara','female','woman','girl'];
+  const brandHints  = ['google','microsoft'];
+
+  // 1. Exact lang + female hint
+  let v = cachedVoices.find(x => x.lang === lang && femaleHints.some(h => x.name.toLowerCase().includes(h)));
+  if(v) return v;
+
+  // 2. Exact lang + brand
+  v = cachedVoices.find(x => x.lang === lang && brandHints.some(h => x.name.toLowerCase().includes(h)));
+  if(v) return v;
+
+  // 3. Exact lang (any)
+  v = cachedVoices.find(x => x.lang === lang);
+  if(v) return v;
+
+  // 4. Base lang + female hint
+  v = cachedVoices.find(x => x.lang.startsWith(base) && femaleHints.some(h => x.name.toLowerCase().includes(h)));
+  if(v) return v;
+
+  // 5. Base lang + brand
+  v = cachedVoices.find(x => x.lang.startsWith(base) && brandHints.some(h => x.name.toLowerCase().includes(h)));
+  if(v) return v;
+
+  // 6. Base lang (any)
+  v = cachedVoices.find(x => x.lang.startsWith(base));
+  if(v) return v;
+
+  // 7. Hindi fallback
+  v = cachedVoices.find(x => x.lang.startsWith('hi'));
+  if(v) return v;
+
+  return null;
+}
+
+function speak(text){
+  if(state.voice === 'off' || !('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
-  const clean = text.replace(/[*_`#>\-]/g, ' ').replace(/\s+/g, ' ').trim();
-  if (!clean) return;
 
-  const u = new SpeechSynthesisUtterance(clean.slice(0, 500));
-  const cfg = LANGS[state.lang];
-  u.lang = cfg.tts;
+  // Clean text for TTS
+  const clean = text
+    .replace(/[*_`#>~]/g, '')
+    .replace(/\[.*?\]\(.*?\)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if(!clean) return;
+
+  // Shorten to first ~350 chars for snappier speech
+  const speechText = clean.length > 350 ? clean.slice(0, 350) : clean;
+
+  const u = new SpeechSynthesisUtterance(speechText);
+
+  // Voice decision — if auto-detect mode, use Hindi TTS for Hindi/Devanagari text
+  let ttsLang = LANGS[state.lang].tts;
+  if(state.lang === 'auto'){
+    // Devanagari → Hindi, Bengali, Tamil, etc.
+    if(/[\u0900-\u097F]/.test(text)) ttsLang = 'hi-IN';
+    else if(/[\u0980-\u09FF]/.test(text)) ttsLang = 'bn-IN';
+    else if(/[\u0B80-\u0BFF]/.test(text)) ttsLang = 'ta-IN';
+    else if(/[\u0C00-\u0C7F]/.test(text)) ttsLang = 'te-IN';
+    else if(/[\u0C80-\u0CFF]/.test(text)) ttsLang = 'kn-IN';
+    else if(/[\u0D00-\u0D7F]/.test(text)) ttsLang = 'ml-IN';
+    else if(/[\u0A00-\u0A7F]/.test(text)) ttsLang = 'pa-IN';
+    else if(/[\u0600-\u06FF]/.test(text)) ttsLang = 'ur-IN';
+    else ttsLang = 'en-IN';
+  }
+
+  u.lang = ttsLang;
   u.rate = 1.0;
-  u.pitch = 1.05;
+  u.pitch = 1.0;
+  u.volume = 1.0;
 
-  const voices = speechSynthesis.getVoices();
-  const base = cfg.tts.split('-')[0];
-  const v = voices.find(x => x.lang === cfg.tts) ||
-            voices.find(x => x.lang.startsWith(base)) ||
-            voices.find(x => x.lang.startsWith('hi')) ||
-            voices.find(x => x.lang.startsWith('en'));
-  if (v) u.voice = v;
+  const bestVoice = pickBestVoice(ttsLang);
+  if(bestVoice) u.voice = bestVoice;
 
-  u.onstart = () => setStatus('speaking');
-  u.onend = () => setStatus();
+  u.onstart = ()=> setStatus('speaking');
+  u.onend = ()=> setStatus();
+  u.onerror = ()=> setStatus();
+
   speechSynthesis.speak(u);
 }
 
+/* ═══ EVENTS ═══ */
 orb.addEventListener('click', startListening);
 
-document.querySelectorAll('.chip').forEach(c => {
-  c.addEventListener('click', () => {
+document.querySelectorAll('.chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
     const q = c.dataset.q;
     addMsg('user', q);
     askAI(q);
   });
 });
 
-$('settingsBtn').onclick = () => { sheet.classList.add('open'); sheetBg.classList.add('open'); };
-sheetBg.onclick = () => { sheet.classList.remove('open'); sheetBg.classList.remove('open'); };
+$('settingsBtn').onclick = ()=>{ sheet.classList.add('open'); sheetBg.classList.add('open'); };
+sheetBg.onclick = ()=>{ sheet.classList.remove('open'); sheetBg.classList.remove('open'); };
 
-$('saveBtn').onclick = () => {
+$('saveBtn').onclick = ()=>{
   const k = keyInput.value.trim();
-  if (k) localStorage.setItem('senorita_key', k);
+  if(k) localStorage.setItem('senorita_key', k);
   state.name = nameInput.value.trim() || 'Senorita';
   localStorage.setItem('senorita_name', state.name);
   localStorage.setItem('senorita_persona', state.persona);
   localStorage.setItem('senorita_lang', state.lang);
+  localStorage.setItem('senorita_voice', state.voice);
   init();
-  sheet.classList.remove('open');
-  sheetBg.classList.remove('open');
+  sheet.classList.remove('open'); sheetBg.classList.remove('open');
   showToast(t('settingsSaved'));
 };
 
-document.querySelectorAll('#personaGrid .option').forEach(o => {
-  o.onclick = () => {
-    document.querySelectorAll('#personaGrid .option').forEach(x => x.classList.remove('active'));
+document.querySelectorAll('#personaGrid .option').forEach(o=>{
+  o.onclick = ()=>{
+    document.querySelectorAll('#personaGrid .option').forEach(x=>x.classList.remove('active'));
     o.classList.add('active');
     state.persona = o.dataset.p;
+    $('personaLabel').textContent = PERSONAS[state.persona].label;
   };
 });
 
-document.querySelectorAll('#langGrid .lang-btn').forEach(o => {
-  o.onclick = () => {
-    document.querySelectorAll('#langGrid .lang-btn').forEach(x => x.classList.remove('active'));
+document.querySelectorAll('#langGrid .lang-btn').forEach(o=>{
+  o.onclick = ()=>{
+    document.querySelectorAll('#langGrid .lang-btn').forEach(x=>x.classList.remove('active'));
     o.classList.add('active');
     state.lang = o.dataset.l;
     statusText.textContent = t('ready');
     textInput.placeholder = t('typePlaceholder');
-    $('muteBtn').textContent = state.muted ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
-    const wt = $('welcomeTitle'), wp = $('welcomeText');
-    if (wt) wt.textContent = t('welcomeTitle');
-    if (wp) wp.textContent = t('welcomeText');
+    $('muteBtn').textContent = state.voice === 'off' ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
+    const wt=$('welcomeTitle'), wp=$('welcomeText');
+    if(wt) wt.textContent = t('welcomeTitle');
+    if(wp) wp.textContent = t('welcomeText');
   };
 });
 
-$('muteBtn').onclick = () => {
-  state.muted = !state.muted;
-  localStorage.setItem('senorita_muted', state.muted);
-  $('muteBtn').textContent = state.muted ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
-  if (state.muted) speechSynthesis.cancel();
-  showToast(state.muted ? t('voiceOff') : t('voiceOn'));
+document.querySelectorAll('#voiceGrid .option').forEach(o=>{
+  o.onclick = ()=>{
+    document.querySelectorAll('#voiceGrid .option').forEach(x=>x.classList.remove('active'));
+    o.classList.add('active');
+    state.voice = o.dataset.v;
+    $('muteBtn').textContent = state.voice === 'off' ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
+    if(state.voice === 'off') speechSynthesis.cancel();
+  };
+});
+
+$('muteBtn').onclick = ()=>{
+  state.voice = state.voice === 'off' ? 'auto' : 'off';
+  localStorage.setItem('senorita_voice', state.voice);
+  $('muteBtn').textContent = state.voice === 'off' ? '🔇 ' + t('voiceOff') : '🔊 ' + t('voiceOn');
+  document.querySelectorAll('#voiceGrid .option').forEach(x=>{
+    x.classList.toggle('active', x.dataset.v === state.voice);
+  });
+  if(state.voice === 'off') speechSynthesis.cancel();
+  showToast(state.voice === 'off' ? t('voiceOff') : t('voiceOn'));
 };
 
-$('langQuickBtn').onclick = () => {
+$('langQuickBtn').onclick = ()=>{
   const keys = Object.keys(LANGS);
   const next = keys[(keys.indexOf(state.lang) + 1) % keys.length];
   state.lang = next;
   localStorage.setItem('senorita_lang', next);
-  document.querySelectorAll('#langGrid .lang-btn').forEach(x => {
+  document.querySelectorAll('#langGrid .lang-btn').forEach(x=>{
     x.classList.toggle('active', x.dataset.l === next);
   });
   $('langQuickBtn').textContent = '🌐 ' + LANGS[next].name;
@@ -978,8 +1077,8 @@ $('langQuickBtn').onclick = () => {
   showToast(t('langSet') + LANGS[next].name);
 };
 
-$('clearBtn').onclick = () => {
-  if (!confirm(t('confirmClear'))) return;
+$('clearBtn').onclick = ()=>{
+  if(!confirm(t('confirmClear'))) return;
   state.history = [];
   chat.innerHTML = '';
   chat.appendChild(welcome);
@@ -989,15 +1088,16 @@ $('clearBtn').onclick = () => {
   showToast(t('chatCleared'));
 };
 
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space' && e.target === document.body) {
+document.addEventListener('keydown', e=>{
+  if(e.code === 'Space' && e.target === document.body){
     e.preventDefault();
     startListening();
   }
 });
 
-speechSynthesis.getVoices();
-speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+/* Preload voices */
+loadVoices();
+speechSynthesis.onvoiceschanged = loadVoices;
 
 init();
 </script>
