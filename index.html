@@ -338,6 +338,8 @@ body::before{
   box-shadow:0 4px 20px rgba(168,85,247,0.4);
 }
 .save-btn:active{transform:scale(0.98)}
+.key-hint{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4}
+.key-hint a{color:var(--accent);text-decoration:none}
 .toast{
   position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(20px);
   background:rgba(20,15,35,0.95);border:1px solid var(--border);
@@ -417,6 +419,16 @@ body::before{
   <div class="sheet-handle"></div>
 
   <div class="sheet-section">
+    <h3>Gemini API Key</h3>
+    <input id="keyInput" type="password" placeholder="AIzaSy..."
+      style="width:100%;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;outline:none">
+    <div class="key-hint">
+      Free key yahan se lo: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
+      Key sirf tumhare phone me save hoti hai, kahin upload nahi hoti.
+    </div>
+  </div>
+
+  <div class="sheet-section">
     <h3>AI Personality</h3>
     <div class="option-grid" id="personaGrid">
       <button class="option active" data-p="friend">
@@ -425,7 +437,7 @@ body::before{
       </button>
       <button class="option" data-p="teacher">
         <div class="opt-title">🎓 Teacher</div>
-        <div class="opt-desc">Detail me samjhayega</div>
+        <div class="opt-desc">Detail me samjhayegi</div>
       </button>
       <button class="option" data-p="expert">
         <div class="opt-title">🧠 Expert</div>
@@ -469,11 +481,15 @@ body::before{
 
 <script>
 /* ═══════════════════════════════════════════════
-   ⚙️  CONFIG — YAHAN APNI GEMINI KEY DAALO
+   ⚙️  CONFIG
+   API key localStorage se aati hai (Settings me daalo)
    ═══════════════════════════════════════════════ */
-const GEMINI_KEY = 'PASTE_YOUR_GEMINI_KEY_HERE';
 const GEMINI_MODEL = 'gemini-2.0-flash';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse&key=`;
+
+function getKey() {
+  return localStorage.getItem('senorita_key') || '';
+}
 
 const PERSONAS = {
   friend: {
@@ -523,11 +539,13 @@ const statusText = $('statusText'), waveform = $('waveform');
 const welcome = $('welcome'), toast = $('toast');
 const sheet = $('sheet'), sheetBg = $('sheetBg');
 const nameInput = $('nameInput');
+const keyInput = $('keyInput');
 
 function init() {
   $('brandName').textContent = state.name;
   $('personaLabel').textContent = PERSONAS[state.persona].label;
   nameInput.value = state.name;
+  keyInput.value = getKey();
   document.title = state.name + ' · AI Assistant';
 
   document.querySelectorAll('#personaGrid .option').forEach(o => {
@@ -540,6 +558,15 @@ function init() {
   if (state.muted) $('muteBtn').textContent = '🔇 Voice OFF';
   else $('muteBtn').textContent = '🔊 Voice ON';
   $('langQuickBtn').textContent = '🌐 ' + (state.lang === 'auto' ? 'Auto' : LANGS[state.lang].name);
+
+  // Agar pehli baar hai aur key nahi hai, settings kholo
+  if (!getKey()) {
+    setTimeout(() => {
+      sheet.classList.add('open');
+      sheetBg.classList.add('open');
+      showToast('Pehle Gemini API key daalo');
+    }, 800);
+  }
 }
 
 function setStatus(text, mode='') {
@@ -554,7 +581,7 @@ function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
   clearTimeout(toast._t);
-  toast._t = setTimeout(() => toast.classList.remove('show'), 2000);
+  toast._t = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 function scrollBottom() {
@@ -639,6 +666,12 @@ function startListening() {
     showToast('Browser me speech support nahi hai');
     return;
   }
+  if (!getKey()) {
+    showToast('Pehle Settings me API key daalo');
+    sheet.classList.add('open');
+    sheetBg.classList.add('open');
+    return;
+  }
   if (isListening) { recog.stop(); return; }
   const cfg = LANGS[state.lang];
   recog.lang = cfg.stt;
@@ -647,9 +680,12 @@ function startListening() {
 }
 
 async function askAI(prompt) {
-  if (!GEMINI_KEY || GEMINI_KEY.includes('PASTE_YOUR')) {
-    addMsg('ai', '⚠️ Gemini API key set nahi hai. index.html me GEMINI_KEY daalo.');
+  const GEMINI_KEY = getKey();
+  if (!GEMINI_KEY) {
+    addMsg('ai', '⚠️ Pehle Settings me apni Gemini API key daalo.');
     setStatus('Ready');
+    sheet.classList.add('open');
+    sheetBg.classList.add('open');
     return;
   }
 
@@ -775,7 +811,10 @@ document.querySelectorAll('.chip').forEach(c => {
 
 $('settingsBtn').onclick = () => { sheet.classList.add('open'); sheetBg.classList.add('open'); };
 sheetBg.onclick = () => { sheet.classList.remove('open'); sheetBg.classList.remove('open'); };
+
 $('saveBtn').onclick = () => {
+  const k = keyInput.value.trim();
+  if (k) localStorage.setItem('senorita_key', k);
   state.name = nameInput.value.trim() || 'Senorita';
   localStorage.setItem('senorita_name', state.name);
   localStorage.setItem('senorita_persona', state.persona);
