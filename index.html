@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a0612">
+<title>Senorita · AI Assistant</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+:root{
+  --bg:#0a0612;
+  --bg2:#0f0a1a;
+  --surface:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);
+  --text:#ece9f5;
+  --muted:#8b86a0;
+  --accent:#a855f7;
+  --accent2:#06b6d4;
+  --accent3:#f472b6;
+  --user:#7c3aed;
+  --danger:#ef4444;
+  --ok:#10b981;
+}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  position:relative;
+  overscroll-behavior:none;
+}
+body::before{
+  content:'';position:fixed;inset:-50%;z-index:0;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(168,85,247,0.15),transparent 40%),
+    radial-gradient(circle at 80% 30%,rgba(6,182,212,0.12),transparent 40%),
+    radial-gradient(circle at 50% 90%,rgba(244,114,182,0.1),transparent 45%);
+  animation:aurora 20s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes aurora{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(5%,-3%) scale(1.1)}
+  66%{transform:translate(-3%,4%) scale(0.95)}
+}
+.app{
+  position:relative;z-index:1;
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;
+  max-width:560px;margin:0 auto;
+  padding-top:env(safe-area-inset-top);
+}
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;
+  backdrop-filter:blur(20px);
+  background:linear-gradient(180deg,rgba(10,6,18,0.9),rgba(10,6,18,0.4));
+  border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+  width:36px;height:36px;border-radius:12px;
+  background:conic-gradient(from 0deg,#a855f7,#06b6d4,#f472b6,#a855f7);
+  display:grid;place-items:center;
+  position:relative;
+  box-shadow:0 0 20px rgba(168,85,247,0.5);
+  animation:spin 8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo::after{
+  content:'';position:absolute;inset:3px;border-radius:9px;
+  background:var(--bg);
+  animation:spin 8s linear infinite reverse;
+}
+.logo span{
+  position:relative;z-index:1;
+  font-size:16px;font-weight:800;
+  background:linear-gradient(135deg,#a855f7,#06b6d4);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.brand-info h1{
+  font-size:15px;font-weight:700;letter-spacing:0.5px;
+  background:linear-gradient(135deg,#fff,#a855f7);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.brand-info p{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+.header-actions{display:flex;gap:8px}
+.icon-btn{
+  width:38px;height:38px;border-radius:11px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);display:grid;place-items:center;
+  cursor:pointer;transition:all 0.2s;
+  font-size:16px;
+}
+.icon-btn:active{transform:scale(0.9);background:rgba(168,85,247,0.2)}
+.status-bar{padding:8px 18px;display:flex;justify-content:center}
+.status-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:5px 12px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--border);
+  font-size:11px;color:var(--muted);letter-spacing:0.5px;
+  transition:all 0.3s;
+}
+.status-chip .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--ok);
+  box-shadow:0 0 8px var(--ok);
+  transition:all 0.3s;
+}
+.status-chip.listening .dot{background:var(--danger);box-shadow:0 0 8px var(--danger);animation:blink 1s infinite}
+.status-chip.thinking .dot{background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 0.6s infinite}
+.status-chip.speaking .dot{background:var(--accent2);box-shadow:0 0 8px var(--accent2);animation:blink 0.8s infinite}
+@keyframes blink{50%{opacity:0.3}}
+.chat{
+  flex:1;overflow-y:auto;
+  padding:12px 16px 8px;
+  display:flex;flex-direction:column;gap:10px;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+}
+.chat::-webkit-scrollbar{width:0}
+.welcome{margin:auto;text-align:center;padding:20px}
+.welcome-orb{
+  width:100px;height:100px;margin:0 auto 20px;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,#a855f7,#06b6d4,#f472b6,#a855f7);
+  position:relative;
+  animation:spin 6s linear infinite;
+  filter:blur(0.5px);
+  opacity:0.9;
+}
+.welcome-orb::after{
+  content:'';position:absolute;inset:6px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#1a0f2e,#0a0612);
+}
+.welcome h2{
+  font-size:22px;font-weight:700;margin-bottom:8px;
+  background:linear-gradient(135deg,#fff,#a855f7,#06b6d4);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.welcome p{color:var(--muted);font-size:13px;line-height:1.6;max-width:280px;margin:0 auto}
+.welcome-chips{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  margin-top:20px;
+}
+.chip{
+  padding:7px 14px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);font-size:12px;cursor:pointer;
+  transition:all 0.2s;
+}
+.chip:active{background:rgba(168,85,247,0.2);border-color:var(--accent)}
+.msg{
+  max-width:85%;padding:11px 15px;
+  border-radius:18px;font-size:14.5px;line-height:1.5;
+  word-wrap:break-word;white-space:pre-wrap;
+  animation:msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;
+}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.msg.user{
+  align-self:flex-end;
+  background:linear-gradient(135deg,#7c3aed,#a855f7);
+  color:white;
+  border-bottom-right-radius:6px;
+  box-shadow:0 4px 15px rgba(124,58,237,0.3);
+}
+.msg.ai{
+  align-self:flex-start;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  border-bottom-left-radius:6px;
+  backdrop-filter:blur(10px);
+}
+.msg.ai::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#a855f7,#06b6d4);
+  border-radius:18px 0 0 18px;
+}
+.msg.interim{
+  align-self:flex-end;
+  background:rgba(124,58,237,0.25);
+  border:1px dashed rgba(168,85,247,0.5);
+  color:#c4b5fd;font-style:italic;
+  border-bottom-right-radius:6px;
+}
+.cursor{
+  display:inline-block;width:7px;height:14px;
+  background:var(--accent);
+  margin-left:2px;vertical-align:middle;
+  animation:blink 1s infinite;
+}
+.orb-area{
+  padding:12px 16px calc(20px + env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  position:relative;
+}
+.orb-wrap{
+  position:relative;width:100px;height:100px;
+  display:grid;place-items:center;
+}
+.orb-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid transparent;
+  background:conic-gradient(from 0deg,#a855f7,#06b6d4,#f472b6,#a855f7) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:spin 4s linear infinite;
+  opacity:0.7;
+}
+.orb-ring2{
+  position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid rgba(168,85,247,0.3);
+  animation:spin 8s linear infinite reverse;
+}
+.orb{
+  width:78px;height:78px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#a855f7,#6d28d9 60%,#4c1d95);
+  position:relative;cursor:pointer;
+  display:grid;place-items:center;
+  box-shadow:
+    0 0 30px rgba(168,85,247,0.5),
+    inset 0 0 20px rgba(255,255,255,0.15);
+  transition:all 0.3s;
+  border:none;color:white;
+}
+.orb:active{transform:scale(0.94)}
+.orb svg{width:32px;height:32px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
+.orb.listening{
+  background:radial-gradient(circle at 30% 30%,#f87171,#dc2626 60%,#991b1b);
+  box-shadow:0 0 40px rgba(239,68,68,0.7),inset 0 0 20px rgba(255,255,255,0.2);
+  animation:orbPulse 0.8s ease-in-out infinite;
+}
+.orb.thinking{
+  background:radial-gradient(circle at 30% 30%,#fbbf24,#d97706 60%,#92400e);
+  box-shadow:0 0 40px rgba(251,191,36,0.6),inset 0 0 20px rgba(255,255,255,0.2);
+  animation:orbPulse 1.2s ease-in-out infinite;
+}
+.orb.speaking{
+  background:radial-gradient(circle at 30% 30%,#22d3ee,#0891b2 60%,#155e75);
+  box-shadow:0 0 40px rgba(6,182,212,0.6),inset 0 0 20px rgba(255,255,255,0.2);
+  animation:orbPulse 0.6s ease-in-out infinite;
+}
+@keyframes orbPulse{50%{transform:scale(1.05)}}
+.waveform{
+  display:flex;align-items:center;justify-content:center;gap:3px;
+  height:24px;opacity:0;transition:opacity 0.3s;
+}
+.waveform.active{opacity:1}
+.waveform span{
+  width:3px;background:linear-gradient(180deg,#a855f7,#06b6d4);
+  border-radius:3px;height:6px;
+  animation:wave 1s ease-in-out infinite;
+}
+.waveform span:nth-child(2){animation-delay:0.1s}
+.waveform span:nth-child(3){animation-delay:0.2s}
+.waveform span:nth-child(4){animation-delay:0.3s}
+.waveform span:nth-child(5){animation-delay:0.4s}
+.waveform span:nth-child(6){animation-delay:0.3s}
+.waveform span:nth-child(7){animation-delay:0.2s}
+.waveform span:nth-child(8){animation-delay:0.1s}
+.waveform span:nth-child(9){animation-delay:0.05s}
+@keyframes wave{0%,100%{height:6px}50%{height:22px}}
+.quick-actions{
+  display:flex;gap:8px;align-items:center;
+  font-size:11px;color:var(--muted);
+}
+.quick-actions button{
+  background:none;border:none;color:var(--muted);
+  font-size:11px;cursor:pointer;padding:6px 10px;
+  border-radius:8px;transition:all 0.2s;
+}
+.quick-actions button:active{background:var(--surface);color:var(--text)}
+.sheet-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(4px);z-index:50;
+  opacity:0;pointer-events:none;transition:opacity 0.3s;
+}
+.sheet-bg.open{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:51;
+  background:linear-gradient(180deg,#15102a,#0a0612);
+  border-top-left-radius:24px;border-top-right-radius:24px;
+  border-top:1px solid var(--border);
+  padding:20px 20px calc(30px + env(safe-area-inset-bottom));
+  transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1);
+  max-height:85vh;overflow-y:auto;
+  max-width:560px;margin:0 auto;
+}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{
+  width:40px;height:4px;border-radius:4px;
+  background:rgba(255,255,255,0.2);
+  margin:0 auto 20px;
+}
+.sheet h3{
+  font-size:14px;font-weight:600;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.sheet h3::before{
+  content:'';width:3px;height:14px;border-radius:2px;
+  background:linear-gradient(180deg,#a855f7,#06b6d4);
+}
+.sheet-section{margin-bottom:24px}
+.option-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+}
+.option{
+  padding:12px 14px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);cursor:pointer;transition:all 0.2s;
+  text-align:left;font-family:inherit;
+}
+.option:active{transform:scale(0.97)}
+.option.active{
+  background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(6,182,212,0.15));
+  border-color:var(--accent);
+  box-shadow:0 0 15px rgba(168,85,247,0.2);
+}
+.option .opt-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.option .opt-desc{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.lang-btn{
+  padding:9px 6px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);font-size:11px;cursor:pointer;
+  font-family:inherit;transition:all 0.2s;
+}
+.lang-btn.active{
+  background:linear-gradient(135deg,rgba(168,85,247,0.25),rgba(6,182,212,0.2));
+  border-color:var(--accent);
+}
+.save-btn{
+  width:100%;padding:14px;border-radius:14px;
+  background:linear-gradient(135deg,#a855f7,#06b6d4);
+  border:none;color:white;font-weight:600;font-size:14px;
+  cursor:pointer;font-family:inherit;
+  box-shadow:0 4px 20px rgba(168,85,247,0.4);
+}
+.save-btn:active{transform:scale(0.98)}
+.toast{
+  position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(20,15,35,0.95);border:1px solid var(--border);
+  padding:10px 18px;border-radius:20px;font-size:12px;
+  color:var(--text);backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;transition:all 0.3s;
+  z-index:100;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="brand">
+      <div class="logo"><span>से</span></div>
+      <div class="brand-info">
+        <h1 id="brandName">Senorita</h1>
+        <p id="personaLabel">Friend Mode</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="clearBtn" title="Clear">🗑</button>
+      <button class="icon-btn" id="settingsBtn" title="Settings">⚙</button>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-chip" id="statusChip">
+      <span class="dot"></span>
+      <span id="statusText">Ready</span>
+    </div>
+  </div>
+
+  <div class="chat" id="chat">
+    <div class="welcome" id="welcome">
+      <div class="welcome-orb"></div>
+      <h2>Namaste, main Senorita 💜</h2>
+      <p>Tumhari personal AI. Mic dabao, kuch bhi poocho — Hindi, English ya kisi bhi language me.</p>
+      <div class="welcome-chips">
+        <div class="chip" data-q="Tell me a fun fact">💡 Fun fact</div>
+        <div class="chip" data-q="Aaj mausam kaisa hai?">🌤️ Mausam</div>
+        <div class="chip" data-q="Ek joke sunao">😂 Joke</div>
+        <div class="chip" data-q="Motivate me for today">⚡ Motivate</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="orb-area">
+    <div class="waveform" id="waveform">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="orb-wrap">
+      <div class="orb-ring"></div>
+      <div class="orb-ring2"></div>
+      <button class="orb" id="orb" aria-label="Talk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </button>
+    </div>
+    <div class="quick-actions">
+      <button id="muteBtn">🔊 Voice ON</button>
+      <span>·</span>
+      <button id="langQuickBtn">🌐 Auto</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+
+  <div class="sheet-section">
+    <h3>AI Personality</h3>
+    <div class="option-grid" id="personaGrid">
+      <button class="option active" data-p="friend">
+        <div class="opt-title">🤝 Friend</div>
+        <div class="opt-desc">Casual, chill, Hinglish</div>
+      </button>
+      <button class="option" data-p="teacher">
+        <div class="opt-title">🎓 Teacher</div>
+        <div class="opt-desc">Detail me samjhayega</div>
+      </button>
+      <button class="option" data-p="expert">
+        <div class="opt-title">🧠 Expert</div>
+        <div class="opt-desc">Professional & precise</div>
+      </button>
+      <button class="option" data-p="funny">
+        <div class="opt-title">😂 Funny</div>
+        <div class="opt-desc">Mazedaar and witty</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="sheet-section">
+    <h3>Language</h3>
+    <div class="lang-grid" id="langGrid">
+      <button class="lang-btn active" data-l="auto">🌐 Auto</button>
+      <button class="lang-btn" data-l="hi-IN">🇮🇳 हिन्दी</button>
+      <button class="lang-btn" data-l="en-IN">🇬🇧 English</button>
+      <button class="lang-btn" data-l="bn-IN">বাংলা</button>
+      <button class="lang-btn" data-l="ta-IN">தமிழ்</button>
+      <button class="lang-btn" data-l="te-IN">తెలుగు</button>
+      <button class="lang-btn" data-l="mr-IN">मराठी</button>
+      <button class="lang-btn" data-l="gu-IN">ગુજરાતી</button>
+      <button class="lang-btn" data-l="kn-IN">ಕನ್ನಡ</button>
+      <button class="lang-btn" data-l="ml-IN">മലയാളം</button>
+      <button class="lang-btn" data-l="pa-IN">ਪੰਜਾਬੀ</button>
+      <button class="lang-btn" data-l="ur-IN">اردو</button>
+    </div>
+  </div>
+
+  <div class="sheet-section">
+    <h3>Assistant Name</h3>
+    <input id="nameInput" type="text" maxlength="16" value="Senorita"
+      style="width:100%;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;outline:none">
+  </div>
+
+  <button class="save-btn" id="saveBtn">Save Settings</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   ⚙️  CONFIG — YAHAN APNI GEMINI KEY DAALO
+   ═══════════════════════════════════════════════ */
+const GEMINI_KEY = 'PASTE_YOUR_GEMINI_KEY_HERE';
+const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent?alt=sse&key=`;
+
+const PERSONAS = {
+  friend: {
+    label: 'Friend Mode',
+    prompt: `You are Senorita, a friendly, warm AI companion for an Indian user. Talk casually like a close friend — mix Hindi and English naturally (Hinglish). Be supportive, use emojis occasionally, keep replies short (2-4 lines usually). Reply in whatever language the user speaks — Hindi, English, Bengali, Tamil, or any other. Match their vibe.`
+  },
+  teacher: {
+    label: 'Teacher Mode',
+    prompt: `You are Senorita, a patient and brilliant teacher. Explain concepts clearly with examples, analogies, and step-by-step breakdowns. Structure your answer. Use the user's language (Hindi, English, or any Indian language). Be thorough but not boring.`
+  },
+  expert: {
+    label: 'Expert Mode',
+    prompt: `You are Senorita, a highly knowledgeable expert assistant. Give precise, professional, well-researched answers. No fluff. Cite facts when relevant. Reply in the user's language. Be confident and authoritative.`
+  },
+  funny: {
+    label: 'Funny Mode',
+    prompt: `You are Senorita, a witty, humorous AI. Crack jokes, use sarcasm (light), puns, and funny analogies — but still answer the actual question correctly. Reply in the user's language, keep the humor culturally relevant to India. Keep it short and punchy.`
+  }
+};
+
+const LANGS = {
+  'auto':  {stt:'hi-IN', tts:'hi-IN', name:'Auto Detect'},
+  'hi-IN': {stt:'hi-IN', tts:'hi-IN', name:'हिन्दी'},
+  'en-IN': {stt:'en-IN', tts:'en-IN', name:'English'},
+  'bn-IN': {stt:'bn-IN', tts:'bn-IN', name:'বাংলা'},
+  'ta-IN': {stt:'ta-IN', tts:'ta-IN', name:'தமிழ்'},
+  'te-IN': {stt:'te-IN', tts:'te-IN', name:'తెలుగు'},
+  'mr-IN': {stt:'mr-IN', tts:'mr-IN', name:'मराठी'},
+  'gu-IN': {stt:'gu-IN', tts:'gu-IN', name:'ગુજરાતી'},
+  'kn-IN': {stt:'kn-IN', tts:'kn-IN', name:'ಕನ್ನಡ'},
+  'ml-IN': {stt:'ml-IN', tts:'ml-IN', name:'മലയാളം'},
+  'pa-IN': {stt:'pa-IN', tts:'pa-IN', name:'ਪੰਜਾਬੀ'},
+  'ur-IN': {stt:'ur-IN', tts:'ur-IN', name:'اردو'},
+};
+
+let state = {
+  persona: localStorage.getItem('senorita_persona') || 'friend',
+  lang:    localStorage.getItem('senorita_lang') || 'auto',
+  name:    localStorage.getItem('senorita_name') || 'Senorita',
+  muted:   localStorage.getItem('senorita_muted') === 'true',
+  history: []
+};
+
+const $ = id => document.getElementById(id);
+const chat = $('chat'), orb = $('orb'), statusChip = $('statusChip');
+const statusText = $('statusText'), waveform = $('waveform');
+const welcome = $('welcome'), toast = $('toast');
+const sheet = $('sheet'), sheetBg = $('sheetBg');
+const nameInput = $('nameInput');
+
+function init() {
+  $('brandName').textContent = state.name;
+  $('personaLabel').textContent = PERSONAS[state.persona].label;
+  nameInput.value = state.name;
+  document.title = state.name + ' · AI Assistant';
+
+  document.querySelectorAll('#personaGrid .option').forEach(o => {
+    o.classList.toggle('active', o.dataset.p === state.persona);
+  });
+  document.querySelectorAll('#langGrid .lang-btn').forEach(o => {
+    o.classList.toggle('active', o.dataset.l === state.lang);
+  });
+
+  if (state.muted) $('muteBtn').textContent = '🔇 Voice OFF';
+  else $('muteBtn').textContent = '🔊 Voice ON';
+  $('langQuickBtn').textContent = '🌐 ' + (state.lang === 'auto' ? 'Auto' : LANGS[state.lang].name);
+}
+
+function setStatus(text, mode='') {
+  statusText.textContent = text;
+  statusChip.className = 'status-chip ' + mode;
+  orb.className = 'orb ' + mode;
+  if (mode === 'listening') waveform.classList.add('active');
+  else waveform.classList.remove('active');
+}
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function scrollBottom() {
+  requestAnimationFrame(() => chat.scrollTop = chat.scrollHeight);
+}
+
+function addMsg(role, text) {
+  if (welcome.parentNode) welcome.remove();
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  el.textContent = text;
+  chat.appendChild(el);
+  scrollBottom();
+  return el;
+}
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recog = null, isListening = false, finalText = '', interimEl = null;
+
+if (SR) {
+  recog = new SR();
+  recog.continuous = false;
+  recog.interimResults = true;
+  recog.maxAlternatives = 1;
+
+  recog.onstart = () => {
+    isListening = true;
+    finalText = '';
+    setStatus('Sun rahi hoon...', 'listening');
+    interimEl = document.createElement('div');
+    interimEl.className = 'msg interim';
+    interimEl.textContent = '...';
+    if (welcome.parentNode) welcome.remove();
+    chat.appendChild(interimEl);
+    scrollBottom();
+    if (navigator.vibrate) navigator.vibrate(20);
+  };
+
+  recog.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalText += t;
+      else interim += t;
+    }
+    if (interimEl) {
+      interimEl.textContent = (finalText + interim) || '...';
+      scrollBottom();
+    }
+  };
+
+  recog.onerror = (e) => {
+    console.warn('STT:', e.error);
+    if (e.error === 'no-speech') showToast('Kuch suna nahi, dobara try karo');
+    else if (e.error === 'not-allowed') showToast('Mic permission chahiye');
+    else if (e.error === 'aborted') {}
+    else showToast('Error: ' + e.error);
+    cleanup();
+  };
+
+  recog.onend = () => {
+    cleanup();
+    const text = finalText.trim();
+    if (text) {
+      if (interimEl) { interimEl.remove(); interimEl = null; }
+      addMsg('user', text);
+      askAI(text);
+    } else {
+      if (interimEl) interimEl.remove();
+      setStatus('Ready');
+    }
+  };
+}
+
+function cleanup() {
+  isListening = false;
+  if (orb.className.includes('listening')) setStatus('Ready');
+}
+
+function startListening() {
+  if (!recog) {
+    showToast('Browser me speech support nahi hai');
+    return;
+  }
+  if (isListening) { recog.stop(); return; }
+  const cfg = LANGS[state.lang];
+  recog.lang = cfg.stt;
+  try { recog.start(); }
+  catch (e) { console.warn(e); }
+}
+
+async function askAI(prompt) {
+  if (!GEMINI_KEY || GEMINI_KEY.includes('PASTE_YOUR')) {
+    addMsg('ai', '⚠️ Gemini API key set nahi hai. index.html me GEMINI_KEY daalo.');
+    setStatus('Ready');
+    return;
+  }
+
+  setStatus('Soch rahi hoon...', 'thinking');
+
+  let langInstruction = '';
+  if (state.lang === 'auto') {
+    langInstruction = 'IMPORTANT: Detect the language of the user\'s message and reply in that SAME language. If they mix languages, mix back naturally.';
+  } else {
+    langInstruction = `IMPORTANT: Reply ONLY in ${LANGS[state.lang].name}.`;
+  }
+
+  const systemPrompt = PERSONAS[state.persona].prompt + '\n\n' + langInstruction +
+    '\n\nKeep responses concise and screen-friendly. Use line breaks for readability.';
+
+  state.history.push({ role: 'user', parts: [{ text: prompt }] });
+
+  const body = {
+    systemInstruction: { parts: [{ text: systemPrompt }] },
+    contents: state.history,
+    generationConfig: { temperature: 0.85, maxOutputTokens: 800, topP: 0.95 }
+  };
+
+  const aiEl = addMsg('ai', '');
+  aiEl.innerHTML = '<span class="cursor"></span>';
+  let fullText = '';
+
+  try {
+    const res = await fetch(GEMINI_URL + GEMINI_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const errTxt = await res.text();
+      throw new Error('API ' + res.status + ': ' + errTxt.slice(0, 200));
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const js = line.slice(6).trim();
+        if (!js || js === '[DONE]') continue;
+        try {
+          const parsed = JSON.parse(js);
+          const parts = parsed.candidates?.[0]?.content?.parts;
+          if (parts) {
+            for (const p of parts) {
+              if (p.text) fullText += p.text;
+            }
+          }
+        } catch (_) {}
+      }
+      aiEl.innerHTML = escapeHtml(fullText) + '<span class="cursor"></span>';
+      scrollBottom();
+    }
+
+    aiEl.textContent = fullText;
+    state.history.push({ role: 'model', parts: [{ text: fullText }] });
+    if (state.history.length > 24) state.history = state.history.slice(-24);
+
+    setStatus('Ready');
+    speak(fullText);
+
+  } catch (err) {
+    console.error(err);
+    aiEl.textContent = '⚠️ ' + err.message;
+    setStatus('Error');
+  }
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function speak(text) {
+  if (state.muted || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const clean = text.replace(/[*_`#>\-]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!clean) return;
+
+  const u = new SpeechSynthesisUtterance(clean.slice(0, 500));
+  const cfg = LANGS[state.lang];
+  u.lang = cfg.tts;
+  u.rate = 1.0;
+  u.pitch = 1.05;
+
+  const voices = speechSynthesis.getVoices();
+  const base = cfg.tts.split('-')[0];
+  const v = voices.find(x => x.lang === cfg.tts) ||
+            voices.find(x => x.lang.startsWith(base)) ||
+            voices.find(x => x.lang.startsWith('hi')) ||
+            voices.find(x => x.lang.startsWith('en'));
+  if (v) u.voice = v;
+
+  u.onstart = () => setStatus('Bol rahi hoon...', 'speaking');
+  u.onend = () => setStatus('Ready');
+
+  speechSynthesis.speak(u);
+}
+
+orb.addEventListener('click', startListening);
+
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => {
+    const q = c.dataset.q;
+    addMsg('user', q);
+    askAI(q);
+  });
+});
+
+$('settingsBtn').onclick = () => { sheet.classList.add('open'); sheetBg.classList.add('open'); };
+sheetBg.onclick = () => { sheet.classList.remove('open'); sheetBg.classList.remove('open'); };
+$('saveBtn').onclick = () => {
+  state.name = nameInput.value.trim() || 'Senorita';
+  localStorage.setItem('senorita_name', state.name);
+  localStorage.setItem('senorita_persona', state.persona);
+  localStorage.setItem('senorita_lang', state.lang);
+  init();
+  sheet.classList.remove('open');
+  sheetBg.classList.remove('open');
+  showToast('Settings saved ✨');
+};
+
+document.querySelectorAll('#personaGrid .option').forEach(o => {
+  o.onclick = () => {
+    document.querySelectorAll('#personaGrid .option').forEach(x => x.classList.remove('active'));
+    o.classList.add('active');
+    state.persona = o.dataset.p;
+  };
+});
+
+document.querySelectorAll('#langGrid .lang-btn').forEach(o => {
+  o.onclick = () => {
+    document.querySelectorAll('#langGrid .lang-btn').forEach(x => x.classList.remove('active'));
+    o.classList.add('active');
+    state.lang = o.dataset.l;
+  };
+});
+
+$('muteBtn').onclick = () => {
+  state.muted = !state.muted;
+  localStorage.setItem('senorita_muted', state.muted);
+  $('muteBtn').textContent = state.muted ? '🔇 Voice OFF' : '🔊 Voice ON';
+  if (state.muted) speechSynthesis.cancel();
+  showToast(state.muted ? 'Voice OFF' : 'Voice ON');
+};
+
+$('langQuickBtn').onclick = () => {
+  const keys = Object.keys(LANGS);
+  const next = keys[(keys.indexOf(state.lang) + 1) % keys.length];
+  state.lang = next;
+  localStorage.setItem('senorita_lang', next);
+  document.querySelectorAll('#langGrid .lang-btn').forEach(x => {
+    x.classList.toggle('active', x.dataset.l === next);
+  });
+  $('langQuickBtn').textContent = '🌐 ' + LANGS[next].name;
+  showToast('Language: ' + LANGS[next].name);
+};
+
+$('clearBtn').onclick = () => {
+  if (!confirm('Chat clear karni hai?')) return;
+  state.history = [];
+  chat.innerHTML = '';
+  chat.appendChild(welcome);
+  welcome.style.display = '';
+  setStatus('Ready');
+  speechSynthesis.cancel();
+  showToast('Chat cleared');
+};
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' && e.target === document.body) {
+    e.preventDefault();
+    startListening();
+  }
+});
+
+speechSynthesis.getVoices();
+speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+
+init();
+</script>
+</body>
+</html>
